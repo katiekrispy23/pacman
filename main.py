@@ -6,6 +6,9 @@ import time
 from random import *
 import Map
 from Classes import *
-from Functions import *
+import Functions
 
+pygame.init()
+
+Functions.intro()
 Map.map()
