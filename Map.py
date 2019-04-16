@@ -3,7 +3,7 @@ from pygame import *
 from PygameSettings import *
 from Classes import *
 
-BACKGROUND_IMAGE = 'Arcade - Pac-Man - General Sprites.png'
+BACKGROUND_IMAGE = 'bg.png'
 def map():
     global cameraX, cameraY, WIN_HEIGHT, WIN_WIDTH
     pygame.init()

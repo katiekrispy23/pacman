@@ -13,7 +13,7 @@ class Player(pygame.sprite.Sprite):
         self.onGround = False
         self.hitTop = False
         self.image = Surface((self.width, self.height))
-        self.image.fill(RED)
+        self.image.fill(YELLOW)
         self.rect = Rect(x, y, self.width, self.height)
 
     def update(self, up, down, left, right,platforms):
