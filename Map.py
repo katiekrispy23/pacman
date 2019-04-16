@@ -2,6 +2,7 @@ import pygame, sys
 from pygame import *
 from PygameSettings import *
 from Classes import *
+import Functions
 
 BACKGROUND_IMAGE = 'bg.png'
 def map():
@@ -44,6 +45,7 @@ def map():
             "P    P   P   P    P",
             "P PPPPPP P PPPPPP P",
             "P                 P",
+            "PPPPPPPPPPPPPPPPPPP",
             "PPPPPPPPPPPPPPPPPPP",]
     # build the level
     playerFlag = True
@@ -112,5 +114,5 @@ def map():
         # update player, draw everything else
         player.update(up, down, left, right, platforms)
         sprites.draw(screen)
-
+        Functions.HUD(3,0)
         pygame.display.update()

@@ -13,7 +13,9 @@ class Player(pygame.sprite.Sprite):
         self.onGround = False
         self.hitTop = False
         self.imageOrig = pygame.image.load('pacman_orig.png').convert_alpha()
+        self.imageOrig = pygame.transform.scale(self.imageOrig, (WIN_WIDTH // 20, WIN_WIDTH // 20))
         self.image = pygame.image.load('pacman_orig.png').convert_alpha()
+        self.image = pygame.transform.scale(self.image, (WIN_WIDTH // 20, WIN_WIDTH // 20))
         self.rect = Rect(x, y, self.width, self.height)
 
 
