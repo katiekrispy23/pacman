@@ -2,11 +2,15 @@ import pygame, sys, random
 from pygame.locals import *
 from PygameSettings import *
 import math
+from math import ceil
 import time
 from random import *
+from Functions import *
+from Classes import *
+from main import *
+
 
 BACKGROUND_IMAGE = 'repeatBG.png'
-
 def main():
     global cameraX, cameraY, WIN_HEIGHT, WIN_WIDTH
     pygame.init()
@@ -75,10 +79,6 @@ def main():
     total_level_width = len(level[0])*BLOCK_WIDTH
     total_level_height = len(level)*BLOCK_HEIGHT
 
-
-    # Initialize the camera
-    camera = Camera(WIN_WIDTH, WIN_HEIGHT)
-
     # Thanks to "opengameart.org"
     bgIMG = pygame.image.load(BACKGROUND_IMAGE).convert_alpha()
     repeatedImageWidth = int(WIN_WIDTH / 2)
@@ -117,55 +117,9 @@ def main():
         for x in range(0,int(total_level_width/repeatedImageWidth)+1):
             screen.blit(myImage,(x*repeatedImageWidth,0))
 
-        #
-
-
-        camera.update(player)
 
         # update player, draw everything else
         player.update(up, down, left, right, platforms)
-        for e in sprites:
-            screen.blit(e.image, camera.apply(e))
+        sprites.draw(screen)
 
         pygame.display.update()
-
-
-# The Camera class takes care of the scrolling
-class Camera(object):
-    def __init__(self,  width, height):
-        self.state = Rect(0, 0, width, height)
-        self.width = width
-        self.height = height
-    def apply(self, target):
-        return target.rect.move(self.state.topleft)
-
-    def update(self, target):
-        self.state = self.shift_camera(target.rect)
-
-    def shift_camera(self,target_rect):
-        # Extract the position of the rectangle bring passed in
-        (left, top, sizeX, sizeY) = target_rect
-
-        # Adjust the left to be half of the screen minus the current left
-        left = HALF_WIDTH - left
-        # Adjust top similarly
-        top = HALF_HEIGHT - top
-
-        # Now, take care of issues with hitting an edge.
-        left = min(0, left)                           # stop scrolling at the left edge
-        left = max(-(self.width-WIN_WIDTH), left)   # stop scrolling at the right edge
-        top = max(-(self.height-WIN_HEIGHT), top) # stop scrolling at the bottom
-        top = min(0, top)                           # stop scrolling at the top
-        return Rect(left, top, self.width, self.height)
-
-
-class Platform(pygame.sprite.Sprite):
-    def __init__(self, x, y):
-        super().__init__()
-        self.image = Surface((BLOCK_WIDTH, BLOCK_HEIGHT))
-        self.image.convert()
-        self.image.fill(PLATFORM_COLOR)
-        self.rect = Rect(x, y, BLOCK_WIDTH, BLOCK_HEIGHT)
-
-    def update(self):
-        pass

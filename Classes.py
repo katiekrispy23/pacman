@@ -5,6 +5,11 @@ import math
 import time
 from random import *
 
+from Map import *
+from Functions import *
+from main import *
+
+
 # Player class. Change this to include an image
 class Player(pygame.sprite.Sprite):
     def __init__(self, x, y,width, height):
@@ -15,7 +20,7 @@ class Player(pygame.sprite.Sprite):
         self.yvel = 0
         self.onGround = False
         self.hitTop = False
-        self.image = Surface((self.width,self.height))
+        self.image = Surface((self.width, self.height))
         self.image.fill(RED)
         self.rect = Rect(x, y, self.width, self.height)
 
@@ -63,3 +68,16 @@ class Player(pygame.sprite.Sprite):
                     self.rect.top = p.rect.bottom
                     self.yvel = 0
                     #print("collide top")
+
+
+class Platform(pygame.sprite.Sprite):
+    def __init__(self, x, y):
+        super().__init__()
+        self.image = Surface((BLOCK_WIDTH, BLOCK_HEIGHT))
+        self.image.convert()
+        self.image.fill(PLATFORM_COLOR)
+        self.rect = Rect(x, y, BLOCK_WIDTH, BLOCK_HEIGHT)
+
+    def update(self):
+        pass
+
