@@ -4,7 +4,7 @@ from PygameSettings import *
 
 # Player class. Change this to include an image
 class Player(pygame.sprite.Sprite):
-    def __init__(self, x, y,width, height):
+    def __init__(self, x, y, width, height):
         super().__init__()
         self.width = width
         self.height = height
@@ -15,6 +15,7 @@ class Player(pygame.sprite.Sprite):
         self.imageOrig = pygame.image.load('pacman_orig.png').convert_alpha()
         self.image = pygame.image.load('pacman_orig.png').convert_alpha()
         self.rect = Rect(x, y, self.width, self.height)
+
 
     # this function will rotate our pacman based on what direction he is going (that way his mouth is always pointing
     # the right way)

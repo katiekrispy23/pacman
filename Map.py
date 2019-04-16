@@ -105,8 +105,8 @@ def map():
                 left = False
 
         # draw background. This is a repeated background
-        for x in range(0,int(total_level_width/repeatedImageWidth)+1):
-            screen.blit(myImage,(x*repeatedImageWidth,0))
+        for x in range(0, int(total_level_width/repeatedImageWidth)+1):
+            screen.blit(myImage, (x*repeatedImageWidth, 0))
 
 
         # update player, draw everything else
