@@ -23,21 +23,21 @@ class Player(pygame.sprite.Sprite):
     # the right way)
     def rot_center(self, x, y, angle):
         self.image = pygame.transform.rotate(self.imageOrig, angle)
-        self.rect = self.image.get_rect(center =(x, y))
+        # self.rect = self.image.get_rect(center =(x, y))
 
     def update(self, up, down, left, right, platforms):
         # Start with no change in x-position... see what happened
         if up:
-            # self.rot_center(self.rect.centerx, self.rect.centery, 90)
+            self.rot_center(self.rect.centerx, self.rect.centery, 90)
             self.yvel = -MOVE_VEL
         if down:
-            # self.rot_center(self.rect.centerx,self.rect.centery, 270)
+            self.rot_center(self.rect.centerx,self.rect.centery, 270)
             self.yvel = MOVE_VEL
         if left:
-            # self.rot_center(self.rect.centerx,self.rect.centery, 180)
+            self.rot_center(self.rect.centerx,self.rect.centery, 180)
             self.xvel = -MOVE_VEL
         if right:
-            # self.rot_center(self.rect.centerx,self.rect.centery, 0)
+            self.rot_center(self.rect.centerx,self.rect.centery, 0)
             self.xvel = MOVE_VEL
 
         # if pacman goes through the tube that wraps the screen
