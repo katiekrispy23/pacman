@@ -12,20 +12,32 @@ class Player(pygame.sprite.Sprite):
         self.yvel = 0
         self.onGround = False
         self.hitTop = False
-        self.image = Surface((self.width, self.height))
-        self.image.fill(YELLOW)
+        self.imageOrig = pygame.image.load('pacman_orig.png').convert_alpha()
+        self.image = pygame.image.load('pacman_orig.png').convert_alpha()
         self.rect = Rect(x, y, self.width, self.height)
 
-    def update(self, up, down, left, right,platforms):
+    # this function will rotate our pacman based on what direction he is going (that way his mouth is always pointing
+    # the right way)
+    def rot_center(self, x, y, angle):
+        self.image = pygame.transform.rotate(self.imageOrig, angle)
+        self.rect = self.image.get_rect(center =(x, y))
+
+    def update(self, up, down, left, right, platforms):
         # Start with no change in x-position... see what happened
         if up:
-            self.yvel = -JUMP_VEL
+            # self.rot_center(self.rect.centerx, self.rect.centery, 90)
+            self.yvel = -MOVE_VEL
         if down:
-            self.yvel = JUMP_VEL
+            # self.rot_center(self.rect.centerx,self.rect.centery, 270)
+            self.yvel = MOVE_VEL
         if left:
+            self.rot_center(self.rect.centerx,self.rect.centery, 180)
             self.xvel = -MOVE_VEL
         if right:
+            self.rot_center(self.rect.centerx,self.rect.centery, 0)
             self.xvel = MOVE_VEL
+
+
         if self.rect.right > WIN_WIDTH:
             self.rect.left = 0
         if self.rect.left < 0:
@@ -72,4 +84,3 @@ class Platform(pygame.sprite.Sprite):
 
     def update(self):
         pass
-

@@ -24,9 +24,9 @@ def map():
     #  You can add different things here
     level = [
             "PPPPPPPPPPPPPPPPPPP",
-            "P       PPP       P",
-            "P PP PP PPP PP PP P",
-            "P PP PP PPP PP PP P",
+            "P        P        P",
+            "P PP PPP P PPP PP P",
+            "P PP PPP P PPP PP P",
             "P                 P",
             "P PP P PPPPP P PP P",
             "P    P   P   P    P",
@@ -56,7 +56,7 @@ def map():
             if col == "M":
                 if playerFlag:
                     # Give the player an initial position (x and y) then width and height
-                    player = Player(x,y, PLAYER_WIDTH, PLAYER_HEIGHT)
+                    player = Player(x, y, PLAYER_WIDTH, PLAYER_HEIGHT)
                     sprites.add(player)
                     # Do not allow another player to be added
                     playerFlag = False
@@ -78,8 +78,8 @@ def map():
     # bg.convert()
 
     while 1:
-        timer.tick(30)
 
+        timer.tick(30)
         for e in pygame.event.get():
 
             if e.type == QUIT:
