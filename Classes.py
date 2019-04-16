@@ -32,17 +32,18 @@ class Player(pygame.sprite.Sprite):
             # self.rot_center(self.rect.centerx,self.rect.centery, 270)
             self.yvel = MOVE_VEL
         if left:
-            self.rot_center(self.rect.centerx,self.rect.centery, 180)
+            # self.rot_center(self.rect.centerx,self.rect.centery, 180)
             self.xvel = -MOVE_VEL
         if right:
-            self.rot_center(self.rect.centerx,self.rect.centery, 0)
+            # self.rot_center(self.rect.centerx,self.rect.centery, 0)
             self.xvel = MOVE_VEL
 
-
+        # if pacman goes through the tube that wraps the screen
         if self.rect.right > WIN_WIDTH:
             self.rect.left = 0
         if self.rect.left < 0:
             self.rect.right = WIN_WIDTH
+
         # increment in x direction
         self.rect.left += self.xvel
         # do x-axis collisions
@@ -60,19 +61,19 @@ class Player(pygame.sprite.Sprite):
                 if xvel > 0:
                     self.rect.right = p.rect.left
                     self.xvel = 0
-                    #print ("collide right")
+
                 if xvel < 0:
                     self.rect.left = p.rect.right
                     self.xvel = 0
-                    #print ("collide left")
+
                 if yvel > 0:
                     self.rect.bottom = p.rect.top
                     self.yvel = 0
-                    #print("collide bottom"
+
                 if yvel < 0:
                     self.rect.top = p.rect.bottom
                     self.yvel = 0
-                    #print("collide top")
+
 
 
 class Platform(pygame.sprite.Sprite):
