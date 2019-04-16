@@ -1,14 +1,6 @@
-import pygame, sys, random
-from pygame.locals import *
+import pygame
+from pygame import *
 from PygameSettings import *
-import math
-import time
-from random import *
-
-from Map import *
-from Functions import *
-from main import *
-
 
 # Player class. Change this to include an image
 class Player(pygame.sprite.Sprite):

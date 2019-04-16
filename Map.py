@@ -1,17 +1,10 @@
-import pygame, sys, random
-from pygame.locals import *
+import pygame
+from pygame import *
 from PygameSettings import *
-import math
-from math import ceil
-import time
-from random import *
-from Functions import *
 from Classes import *
-from main import *
 
-
-BACKGROUND_IMAGE = 'repeatBG.png'
-def main():
+BACKGROUND_IMAGE = 'Arcade - Pac-Man - General Sprites.png'
+def map():
     global cameraX, cameraY, WIN_HEIGHT, WIN_WIDTH
     pygame.init()
     screen = pygame.display.set_mode((WIN_WIDTH,WIN_HEIGHT), FLAGS, DEPTH)
@@ -21,8 +14,6 @@ def main():
     down = False
     left = False
     right = False
-
-
 
     sprites = pygame.sprite.Group()
     platforms = []
