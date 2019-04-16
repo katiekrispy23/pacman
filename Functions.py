@@ -24,6 +24,7 @@ def intro():
     imgOrig = pygame.image.load('intro.png')
     img = pygame.transform.scale(imgOrig, (h, v - v // 16))
     smallText = pygame.font.Font('freesansbold.ttf', 16)
+    medText = pygame.font.Font('freesansbold.ttf', 24)
 
     while intro:
         for event in pygame.event.get():
@@ -42,23 +43,15 @@ def intro():
         # blits image to screen
         screen.blit(img, (0,0))
         #add other text to screen
-        TextSurf, introRect = text_objects("Press UP arrow to thrust forwards, L & R arrows to rotate ship,", smallText, WHITE)
-        introRect.center = (h // 2, v // 32)
-        screen.blit(TextSurf, introRect)
-
-        TextSurf, introRect = text_objects("and spacebar to shoot!", smallText, WHITE)
-        introRect.center = (h // 2, 2.5*v // 32)
-        screen.blit(TextSurf, introRect)
-
-        TextSurf, introRect = text_objects("Protect the galaxy by shooting the Asteroids!", smallText, WHITE)
+        TextSurf, introRect = text_objects("Use the arrow keys to control Pacman", smallText, WHITE)
         introRect.center = (h // 2, v - v // 8)
         screen.blit(TextSurf, introRect)
 
-        TextSurf, introRect = text_objects("You only have 3 chances, Space Cadet", smallText, WHITE)
-        introRect.center = (h // 2, v - v // 8 + v // 28)
+        TextSurf, introRect = text_objects("Eat all the dots to win!", smallText, WHITE)
+        introRect.center = (h // 2, v - v // 8 + v // 32)
         screen.blit(TextSurf, introRect)
 
-        TextSurf, introRect = text_objects("Press \'enter\' to Start", smallText, WHITE)
+        TextSurf, introRect = text_objects("Press \'enter\' to Start", medText, WHITE)
         introRect.center = (h // 2, v - v // 32)
         screen.blit(TextSurf, introRect)
         pygame.display.update()
