@@ -4,18 +4,20 @@ from PygameSettings import *
 
 # Player class. Change this to include an image
 class Player(pygame.sprite.Sprite):
-    def __init__(self, x, y, width, height):
+    def __init__(self, imgFile, x, y, width, height):
         super().__init__()
         self.width = width
         self.height = height
         self.xvel = 0
         self.yvel = 0
+        self.rot = 0
         self.onGround = False
         self.hitTop = False
-        self.imageOrig = pygame.image.load('pacman_orig.png').convert_alpha()
-        self.imageOrig = pygame.transform.scale(self.imageOrig, (WIN_WIDTH // 20, WIN_WIDTH // 20))
-        self.image = pygame.image.load('pacman_orig.png').convert_alpha()
-        self.image = pygame.transform.scale(self.image, (WIN_WIDTH // 20, WIN_WIDTH // 20))
+        self.imageOrig = pygame.transform.scale(imgFile, (WIN_WIDTH // 20, WIN_WIDTH // 20))
+        self.image = pygame.transform.scale(imgFile, (WIN_WIDTH // 20, WIN_WIDTH // 20))
+        # pacman_little = pygame.image.load('pacman_orig.png').convert_alpha()
+        # pacman_circle = pygame.image.load('pacman_circle.png').convert_alpha()
+        # pacman_big = pygame.image.load('pacman_bigbite.png').convert_alpha()
         self.rect = Rect(x, y, self.width, self.height)
 
 
@@ -23,22 +25,52 @@ class Player(pygame.sprite.Sprite):
     # the right way)
     def rot_center(self, x, y, angle):
         self.image = pygame.transform.rotate(self.imageOrig, angle)
-        # self.rect = self.image.get_rect(center =(x, y))
 
-    def update(self, up, down, left, right, platforms):
+    def chompchomp(self, counter):
+        if counter == 0:
+            self.imageOrig = pygame.image.load('pacman_bigbite.png').convert_alpha()
+        if counter == 5:
+            self.imageOrig = pygame.image.load('pacman_orig.png').convert_alpha()
+        if counter == 10:
+            self.imageOrig = pygame.image.load('pacman_circle.png').convert_alpha()
+
+    def StillChompChomp(self, counter, rot):
+        if counter == 0:
+            self.imageOrig = pygame.image.load('pacman_bigbite.png').convert_alpha()
+            self.rot_center(self.rect.centerx, self.rect.centery, self.rot)
+        if counter == 5:
+            self.imageOrig = pygame.image.load('pacman_orig.png').convert_alpha()
+            self.rot_center(self.rect.centerx, self.rect.centery, self.rot)
+        if counter == 10:
+            self.imageOrig = pygame.image.load('pacman_circle.png').convert_alpha()
+            self.rot_center(self.rect.centerx, self.rect.centery, self.rot)
+
+    def update(self, up, down, left, right, platforms, counter):
         # Start with no change in x-position... see what happened
         if up:
-            self.rot_center(self.rect.centerx, self.rect.centery, 90)
+            self.rot = 90
+            self.chompchomp(counter)
+            self.rot_center(self.rect.centerx, self.rect.centery, self.rot)
             self.yvel = -MOVE_VEL
-        if down:
-            self.rot_center(self.rect.centerx,self.rect.centery, 270)
+        elif down:
+            self.rot = 270
+            self.chompchomp(counter)
+            self.rot_center(self.rect.centerx,self.rect.centery, self.rot)
             self.yvel = MOVE_VEL
-        if left:
-            self.rot_center(self.rect.centerx,self.rect.centery, 180)
+        elif left:
+            self.rot = 180
+            self.chompchomp(counter)
+            self.rot_center(self.rect.centerx,self.rect.centery, self.rot)
             self.xvel = -MOVE_VEL
-        if right:
-            self.rot_center(self.rect.centerx,self.rect.centery, 0)
+        elif right:
+            self.rot = 0
+            self.chompchomp(counter)
+            self.rot_center(self.rect.centerx,self.rect.centery, self.rot)
             self.xvel = MOVE_VEL
+
+        # even if not moving should still be chomping
+        else:
+            self.StillChompChomp(counter, self.rot)
 
         # if pacman goes through the tube that wraps the screen
         if self.rect.right > WIN_WIDTH:
