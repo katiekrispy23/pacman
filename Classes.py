@@ -30,6 +30,7 @@ class Player(pygame.sprite.Sprite):
     def rot_center(self, x, y, angle):
         self.image = pygame.transform.rotate(self.imageOrig, angle)
 
+    # makes chewing animation when pacman is in motion
     def chompchomp(self, counter):
         if counter == 0:
             self.imageOrig = self.pacman_big
@@ -38,6 +39,7 @@ class Player(pygame.sprite.Sprite):
         if counter == 10:
             self.imageOrig = self.pacman_circle
 
+    # makes chewing animation when pacman is not moving
     def StillChompChomp(self, counter, rot):
         if counter == 0:
             self.imageOrig = self.pacman_big
@@ -49,6 +51,7 @@ class Player(pygame.sprite.Sprite):
             self.imageOrig = self.pacman_circle
             self.rot_center(self.rect.centerx, self.rect.centery, self.rot)
 
+    # updates the location and speed based on keyboard inputs
     def update(self, up, down, left, right, platforms, counter):
         # Start with no change in x-position... see what happened
         if up:
@@ -93,6 +96,7 @@ class Player(pygame.sprite.Sprite):
         # do y-axis collisions
         self.collide(0, self.yvel, platforms)
 
+    #rules for when he collides with walls and barriers
     def collide(self, xvel, yvel, platforms):
         for p in platforms:
             if pygame.sprite.collide_rect(self, p):
@@ -113,7 +117,7 @@ class Player(pygame.sprite.Sprite):
                     self.yvel = 0
 
 
-
+# platform class - used in Map()
 class Platform(pygame.sprite.Sprite):
     def __init__(self, x, y):
         super().__init__()
