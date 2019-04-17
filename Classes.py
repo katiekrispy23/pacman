@@ -15,9 +15,13 @@ class Player(pygame.sprite.Sprite):
         self.hitTop = False
         self.imageOrig = pygame.transform.scale(imgFile, (WIN_WIDTH // 20, WIN_WIDTH // 20))
         self.image = pygame.transform.scale(imgFile, (WIN_WIDTH // 20, WIN_WIDTH // 20))
-        # pacman_little = pygame.image.load('pacman_orig.png').convert_alpha()
-        # pacman_circle = pygame.image.load('pacman_circle.png').convert_alpha()
-        # pacman_big = pygame.image.load('pacman_bigbite.png').convert_alpha()
+        self.littlebite = pygame.image.load('pacman_orig.png').convert_alpha()
+        self.circle = pygame.image.load('pacman_circle.png').convert_alpha()
+        self.bigbite = pygame.image.load('pacman_bigbite.png').convert_alpha()
+
+        self.pacman_little = pygame.transform.scale(self.littlebite, (WIN_WIDTH // 20, WIN_WIDTH // 20))
+        self.pacman_circle = pygame.transform.scale(self.circle, (WIN_WIDTH // 20, WIN_WIDTH // 20))
+        self.pacman_big = pygame.transform.scale(self.bigbite, (WIN_WIDTH // 20, WIN_WIDTH // 20))
         self.rect = Rect(x, y, self.width, self.height)
 
 
@@ -28,21 +32,21 @@ class Player(pygame.sprite.Sprite):
 
     def chompchomp(self, counter):
         if counter == 0:
-            self.imageOrig = pygame.image.load('pacman_bigbite.png').convert_alpha()
+            self.imageOrig = self.pacman_big
         if counter == 5:
-            self.imageOrig = pygame.image.load('pacman_orig.png').convert_alpha()
+            self.imageOrig = self.pacman_little
         if counter == 10:
-            self.imageOrig = pygame.image.load('pacman_circle.png').convert_alpha()
+            self.imageOrig = self.pacman_circle
 
     def StillChompChomp(self, counter, rot):
         if counter == 0:
-            self.imageOrig = pygame.image.load('pacman_bigbite.png').convert_alpha()
+            self.imageOrig = self.pacman_big
             self.rot_center(self.rect.centerx, self.rect.centery, self.rot)
         if counter == 5:
-            self.imageOrig = pygame.image.load('pacman_orig.png').convert_alpha()
+            self.imageOrig = self.pacman_little
             self.rot_center(self.rect.centerx, self.rect.centery, self.rot)
         if counter == 10:
-            self.imageOrig = pygame.image.load('pacman_circle.png').convert_alpha()
+            self.imageOrig = self.pacman_circle
             self.rot_center(self.rect.centerx, self.rect.centery, self.rot)
 
     def update(self, up, down, left, right, platforms, counter):
