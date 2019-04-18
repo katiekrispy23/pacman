@@ -8,8 +8,8 @@ class Player(pygame.sprite.Sprite):
         super().__init__()
         self.width = width
         self.height = height
-        self.xvel = 0
-        self.yvel = 0
+        self.x = 0
+        self.y = 0
         self.rot = 0
         self.onGround = False
         self.hitTop = False
@@ -52,28 +52,28 @@ class Player(pygame.sprite.Sprite):
             self.rot_center(self.rect.centerx, self.rect.centery, self.rot)
 
     # updates the location and speed based on keyboard inputs
-    def update(self, up, down, left, right, platforms, counter):
+    def update(self, up, down, left, right, platforms, counter, sprites, power_list, score, fruit_list):
         # Start with no change in x-position... see what happened
         if up:
             self.rot = 90
             self.chompchomp(counter)
             self.rot_center(self.rect.centerx, self.rect.centery, self.rot)
-            self.yvel = -MOVE_VEL
+            self.y = -MOVE_VEL
         elif down:
             self.rot = 270
             self.chompchomp(counter)
             self.rot_center(self.rect.centerx,self.rect.centery, self.rot)
-            self.yvel = MOVE_VEL
+            self.y = MOVE_VEL
         elif left:
             self.rot = 180
             self.chompchomp(counter)
             self.rot_center(self.rect.centerx,self.rect.centery, self.rot)
-            self.xvel = -MOVE_VEL
+            self.x = -MOVE_VEL
         elif right:
             self.rot = 0
             self.chompchomp(counter)
             self.rot_center(self.rect.centerx,self.rect.centery, self.rot)
-            self.xvel = MOVE_VEL
+            self.x = MOVE_VEL
 
         # even if not moving should still be chomping
         else:
@@ -86,36 +86,64 @@ class Player(pygame.sprite.Sprite):
             self.rect.right = WIN_WIDTH
 
         # increment in x direction
-        self.rect.left += self.xvel
+        self.rect.left += self.x
+        
         # do x-axis collisions
-        self.collide(self.xvel, 0, platforms)
+        score = self.collide(self.x, 0, platforms, sprites, power_list, fruit_list, score)
+
         # increment in y direction
-        self.rect.top += self.yvel
+        self.rect.top += self.y
+
         # assuming we're in the air
         self.onGround = False
+
         # do y-axis collisions
-        self.collide(0, self.yvel, platforms)
+        score = self.collide(0, self.y, platforms, sprites, power_list, fruit_list, score)
+        return score
+
 
     #rules for when he collides with walls and barriers
-    def collide(self, xvel, yvel, platforms):
+    def collide(self, x, y, platforms, sprites,power_list,fruit_list, score):
+        for s in sprites:
+            if s not in platforms:
+                if s != self.rect and self.rect.collidepoint(s.rect.center) and s in power_list:
+                    score += 50
+                    print(score)
+                    sprites.remove(s)
+                    power_list.remove(s)
+
+                elif s != self.rect and self.rect.collidepoint(s.rect.center) and s in fruit_list:
+                    score += 100
+                    print(score)
+                    sprites.remove(s)
+                    fruit_list.remove(s)
+
+                elif s != self.rect and self.rect.collidepoint(s.rect.center):
+                    sprites.remove(s)
+                    score += 10
+                    print(score)
+
+
+
         for p in platforms:
             if pygame.sprite.collide_rect(self, p):
-                if xvel > 0:
+                if x > 0:
                     self.rect.right = p.rect.left
-                    self.xvel = 0
-
-                if xvel < 0:
+                    self.x = 0
+                    #print ("collide right")
+                if x < 0:
                     self.rect.left = p.rect.right
-                    self.xvel = 0
-
-                if yvel > 0:
+                    self.x = 0
+                    #print ("collide left")
+                if y > 0:
                     self.rect.bottom = p.rect.top
-                    self.yvel = 0
-
-                if yvel < 0:
+                    self.y = 0
+                    #print("collide bottom"
+                if y < 0:
                     self.rect.top = p.rect.bottom
-                    self.yvel = 0
-
+                    self.y = 0
+                    #print("collide top")
+        return score
 
 # platform class - used in Map()
 class Platform(pygame.sprite.Sprite):
@@ -128,3 +156,31 @@ class Platform(pygame.sprite.Sprite):
 
     def update(self):
         pass
+
+
+class Pellets(pygame.sprite.Sprite):
+    def __init__(self, x, y):
+        super().__init__()
+        self.image = Surface((BLOCK_WIDTH // 3, BLOCK_HEIGHT // 3))
+        self.image.convert()
+        self.image.fill(PACMAN_PEACH)
+        self.rect = Rect(x + BLOCK_WIDTH // 3, y + BLOCK_WIDTH // 3, BLOCK_WIDTH // 3, BLOCK_HEIGHT // 3)
+
+class Power(pygame.sprite.Sprite):
+    def __init__(self, x, y):
+        super().__init__()
+        self.x = 0
+        self.y = 0
+        self.imageOrig = pygame.image.load('power_pellet.png').convert_alpha()
+        self.image = pygame.transform.scale(self.imageOrig, (BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6, BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6))
+        self.rect = Rect(x + BLOCK_WIDTH // 6, y + BLOCK_WIDTH // 8, BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6, BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6)
+
+class Fruit(pygame.sprite.Sprite):
+    def __init__(self, x, y):
+        super().__init__()
+        self.x = 0
+        self.y = 0
+        self.imageOrig = pygame.image.load('cherry.png').convert_alpha()
+        self.image = pygame.transform.scale(self.imageOrig, (BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6, BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6))
+        self.rect = Rect(x + BLOCK_WIDTH // 4, y + BLOCK_WIDTH // 4, BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6, BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6)
+
