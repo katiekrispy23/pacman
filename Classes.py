@@ -2,6 +2,7 @@ import pygame
 from pygame import *
 from PygameSettings import *
 
+
 # Player class. Change this to include an image
 class Player(pygame.sprite.Sprite):
     def __init__(self, imgFile, x, y, width, height):
@@ -15,15 +16,14 @@ class Player(pygame.sprite.Sprite):
         self.hitTop = False
         self.imageOrig = pygame.transform.scale(imgFile, (WIN_WIDTH // 20, WIN_WIDTH // 20))
         self.image = pygame.transform.scale(imgFile, (WIN_WIDTH // 20, WIN_WIDTH // 20))
-        self.littlebite = pygame.image.load('pacman_orig.png').convert_alpha()
-        self.circle = pygame.image.load('pacman_circle.png').convert_alpha()
-        self.bigbite = pygame.image.load('pacman_bigbite.png').convert_alpha()
+        self.littlebite = pygame.image.load('Sprites/pacman_orig.png').convert_alpha()
+        self.circle = pygame.image.load('Sprites/pacman_circle.png').convert_alpha()
+        self.bigbite = pygame.image.load('Sprites/pacman_bigbite.png').convert_alpha()
 
         self.pacman_little = pygame.transform.scale(self.littlebite, (WIN_WIDTH // 20, WIN_WIDTH // 20))
         self.pacman_circle = pygame.transform.scale(self.circle, (WIN_WIDTH // 20, WIN_WIDTH // 20))
         self.pacman_big = pygame.transform.scale(self.bigbite, (WIN_WIDTH // 20, WIN_WIDTH // 20))
         self.rect = Rect(x, y, self.width, self.height)
-
 
     # this function will rotate our pacman based on what direction he is going (that way his mouth is always pointing
     # the right way)
@@ -101,8 +101,7 @@ class Player(pygame.sprite.Sprite):
         score = self.collide(0, self.y, platforms, sprites, power_list, fruit_list, score)
         return score
 
-
-    #rules for when he collides with walls and barriers
+    # rules for when he collides with walls and barriers
     def collide(self, x, y, platforms, sprites,power_list,fruit_list, score):
         for s in sprites:
             if s not in platforms:
@@ -123,27 +122,26 @@ class Player(pygame.sprite.Sprite):
                     score += 10
                     print(score)
 
-
-
         for p in platforms:
             if pygame.sprite.collide_rect(self, p):
                 if x > 0:
                     self.rect.right = p.rect.left
                     self.x = 0
-                    #print ("collide right")
+                    # print ("collide right")
                 if x < 0:
                     self.rect.left = p.rect.right
                     self.x = 0
-                    #print ("collide left")
+                    # print ("collide left")
                 if y > 0:
                     self.rect.bottom = p.rect.top
                     self.y = 0
-                    #print("collide bottom"
+                    # print("collide bottom"
                 if y < 0:
                     self.rect.top = p.rect.bottom
                     self.y = 0
-                    #print("collide top")
+                    # print("collide top")
         return score
+
 
 # platform class - used in Map()
 class Platform(pygame.sprite.Sprite):
@@ -166,14 +164,16 @@ class Pellets(pygame.sprite.Sprite):
         self.image.fill(PACMAN_PEACH)
         self.rect = Rect(x + BLOCK_WIDTH // 3, y + BLOCK_WIDTH // 3, BLOCK_WIDTH // 3, BLOCK_HEIGHT // 3)
 
+
 class Power(pygame.sprite.Sprite):
     def __init__(self, x, y):
         super().__init__()
         self.x = 0
         self.y = 0
-        self.imageOrig = pygame.image.load('power_pellet.png').convert_alpha()
+        self.imageOrig = pygame.image.load('Sprites/power_pellet.png').convert_alpha()
         self.image = pygame.transform.scale(self.imageOrig, (BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6, BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6))
         self.rect = Rect(x + BLOCK_WIDTH // 6, y + BLOCK_WIDTH // 8, BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6, BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6)
+
 
 class Fruit(pygame.sprite.Sprite):
     def __init__(self, x, y):
@@ -184,3 +184,12 @@ class Fruit(pygame.sprite.Sprite):
         self.image = pygame.transform.scale(self.imageOrig, (BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6, BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6))
         self.rect = Rect(x + BLOCK_WIDTH // 4, y + BLOCK_WIDTH // 4, BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6, BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6)
 
+
+class Ghost(pygame.sprite.Sprite):
+    def __init__(self, x, y, sprite):
+        super().__init__()
+        self.x = 0
+        self.y = 0
+        self.imageOrig = pygame.image.load(sprite).convert_alpha()
+        self.image = pygame.transform.scale(self.imageOrig, (BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6, BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6))
+        self.rect = Rect(x + BLOCK_WIDTH // 4, y + BLOCK_WIDTH // 4, BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6, BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6)

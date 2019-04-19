@@ -19,7 +19,7 @@ def intro():
     intro = True
     # what happens when intro is launched
     # loads picture and scales it to the screen
-    imgOrig = pygame.image.load('intro.png')
+    imgOrig = pygame.image.load('Sprites/intro.png')
     img = pygame.transform.scale(imgOrig, (h, v - v // 16))
     smallText = pygame.font.Font('freesansbold.ttf', 16)
     medText = pygame.font.Font('freesansbold.ttf', 24)
@@ -57,7 +57,7 @@ def intro():
         
 def HUD(lives, score):
     # draw "lives" on bottom left of screen
-    lifeImg =  pygame.image.load('life.png')
+    lifeImg =  pygame.image.load('Sprites/life.png')
     lifeImg = pygame.transform.scale(lifeImg, (h // 24, h // 24))
 
     if lives == 3:
