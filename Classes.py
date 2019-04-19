@@ -180,7 +180,7 @@ class Fruit(pygame.sprite.Sprite):
         super().__init__()
         self.x = 0
         self.y = 0
-        self.imageOrig = pygame.image.load('cherry.png').convert_alpha()
+        self.imageOrig = pygame.image.load('Items/ITEM_CHERRY.png').convert_alpha()
         self.image = pygame.transform.scale(self.imageOrig, (BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6, BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6))
         self.rect = Rect(x + BLOCK_WIDTH // 4, y + BLOCK_WIDTH // 4, BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6, BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6)
 
