@@ -4,9 +4,6 @@ from PygameSettings import *
 from Classes import *
 import Functions
 
-# pacman_littleOrig = pygame.image.load('pacman_orig.png').convert_alpha()
-# pacman_circleOrig = pygame.image.load('pacman_circle.png').convert_alpha()
-# pacman_bigOrig = pygame.image.load('pacman_bigbite.png').convert_alpha()
 pacman_little = pygame.image.load('pacman_orig.png').convert_alpha()
 pacman_circle = pygame.image.load('pacman_circle.png').convert_alpha()
 pacman_big = pygame.image.load('pacman_bigbite.png').convert_alpha()
@@ -126,7 +123,7 @@ BACKGROUND_IMAGE = 'bg.png'
     #     pygame.display.update()
 
 def map():
-    global WIN_HEIGHT, WIN_WIDTH
+    # global WIN_HEIGHT, WIN_WIDTH
     pygame.init()
     screen = pygame.display.set_mode((WIN_WIDTH,WIN_HEIGHT), FLAGS, DEPTH)
     timer = pygame.time.Clock()
@@ -203,7 +200,7 @@ def map():
         print("You didn't include a player!")
         pygame.quit()
     total_level_width = len(level)
-    total_level_height = len(level)
+    # total_level_height = len(level)
 
     # Thanks to "opengameart.org"
     bgIMG = pygame.image.load(BACKGROUND_IMAGE).convert_alpha()
@@ -243,7 +240,7 @@ def map():
 
         # draw background. This is a repeated background
         for x in range(0,int(total_level_width)):
-            screen.blit(myImage,(x*repeatedImageWidth,0))
+            screen.blit(myImage, (x*repeatedImageWidth, 0))
 
         # update player, draw everything else
         counter = counter % 15
