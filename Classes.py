@@ -32,12 +32,17 @@ class Player(pygame.sprite.Sprite):
 
     # makes chewing animation when pacman is in motion
     def chompchomp(self, counter):
+        chompSound = pygame.mixer.Sound("Sounds/pacman_chomp.wav")
+
         if counter == 0:
             self.imageOrig = self.pacman_big
         if counter == 5:
             self.imageOrig = self.pacman_little
         if counter == 10:
             self.imageOrig = self.pacman_circle
+
+        if counter//2 == 0:
+            pygame.mixer.Sound.play(chompSound)
 
     # makes chewing animation when pacman is not moving
     def StillChompChomp(self, counter, rot):
