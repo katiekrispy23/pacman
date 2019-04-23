@@ -16,16 +16,19 @@ def text_objects(text, font, color):
 # intro function
 def intro():
     timer.tick(15)
+
     intro = True
     # what happens when intro is launched
     # loads picture and scales it to the screen
-    imgOrig = pygame.image.load('intro.png')
+    imgOrig = pygame.image.load('Sprites/intro.png')
     img = pygame.transform.scale(imgOrig, (h, v - v // 16))
     smallText = pygame.font.Font('freesansbold.ttf', 16)
     medText = pygame.font.Font('freesansbold.ttf', 24)
-
+    introMusic = pygame.mixer.Sound("Sounds/pacman_beginning.wav")
+    pygame.mixer.Sound.play(introMusic)
     while intro:
         for event in pygame.event.get():
+
             keys = pygame.key.get_pressed()
             # allow user to exit game from intro screen if desired
             if (event.type == pygame.QUIT) or (keys[pygame.K_ESCAPE]):
@@ -57,7 +60,7 @@ def intro():
         
 def HUD(lives, score):
     # draw "lives" on bottom left of screen
-    lifeImg =  pygame.image.load('life.png')
+    lifeImg =  pygame.image.load('Sprites/life.png')
     lifeImg = pygame.transform.scale(lifeImg, (h // 24, h // 24))
 
     if lives == 3:

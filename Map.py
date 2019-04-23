@@ -4,10 +4,13 @@ from PygameSettings import *
 from Classes import *
 import Functions
 
-pacman_little = pygame.image.load('pacman_orig.png').convert_alpha()
-pacman_circle = pygame.image.load('pacman_circle.png').convert_alpha()
-pacman_big = pygame.image.load('pacman_bigbite.png').convert_alpha()
-BACKGROUND_IMAGE = 'bg.png'
+# pacman_littleOrig = pygame.image.load('pacman_orig.png').convert_alpha()
+# pacman_circleOrig = pygame.image.load('pacman_circle.png').convert_alpha()
+# pacman_bigOrig = pygame.image.load('pacman_bigbite.png').convert_alpha()
+pacman_little = pygame.image.load('Sprites/pacman_orig.png').convert_alpha()
+pacman_circle = pygame.image.load('Sprites/pacman_circle.png').convert_alpha()
+pacman_big = pygame.image.load('Sprites/pacman_bigbite.png').convert_alpha()
+BACKGROUND_IMAGE = 'Sprites/bg.png'
 # def map():
     # global cameraX, cameraY, WIN_HEIGHT, WIN_WIDTH
     # pygame.init()
@@ -123,7 +126,7 @@ BACKGROUND_IMAGE = 'bg.png'
     #     pygame.display.update()
 
 def map():
-    # global WIN_HEIGHT, WIN_WIDTH
+    global WIN_HEIGHT, WIN_WIDTH
     pygame.init()
     screen = pygame.display.set_mode((WIN_WIDTH,WIN_HEIGHT), FLAGS, DEPTH)
     timer = pygame.time.Clock()
@@ -151,9 +154,9 @@ def map():
             "PCPPCPCPPPPPCPCPPCP",
             "PCCCCPCCCPCCCPCCCCP",
             "PPPPCPPPCPCPPPCPPPP",
-            "PPPPCP       PCPPPP",
+            "PPPPCP   R   PCPPPP",
             "PPPPCP PP PP PCPPPP",
-            "    C  P   P  C    ",
+            "    C  PBQOP  C    ",
             "PPPPCP PPPPP PCPPPP",
             "PPPPCP   F   PCPPPP",
             "PPPPCPCPPPPPCPCPPPP",
@@ -170,6 +173,22 @@ def map():
     playerFlag = True
     for row in level:
         for col in row:
+            if col == "B":
+                ghost = Ghost(x, y, "Sprites/BLUE_GHOST_UP.png")
+                power_list.append(ghost)
+                sprites.add(ghost)
+            if col == "Q":
+                ghost = Ghost(x, y, "Sprites/PINK_GHOST_DOWN.png")
+                power_list.append(ghost)
+                sprites.add(ghost)
+            if col == "O":
+                ghost = Ghost(x, y, "Sprites/ORANGE_GHOST_UP.png")
+                power_list.append(ghost)
+                sprites.add(ghost)
+            if col == "R":
+                ghost = Ghost(x, y, "Sprites/RED_GHOST_LEFT.png")
+                power_list.append(ghost)
+                sprites.add(ghost)
             if col == "Y":
                 power = Power(x, y)
                 power_list.append(power)
@@ -200,7 +219,7 @@ def map():
         print("You didn't include a player!")
         pygame.quit()
     total_level_width = len(level)
-    # total_level_height = len(level)
+    total_level_height = len(level)
 
     # Thanks to "opengameart.org"
     bgIMG = pygame.image.load(BACKGROUND_IMAGE).convert_alpha()
@@ -240,7 +259,7 @@ def map():
 
         # draw background. This is a repeated background
         for x in range(0,int(total_level_width)):
-            screen.blit(myImage, (x*repeatedImageWidth, 0))
+            screen.blit(myImage,(x*repeatedImageWidth,0))
 
         # update player, draw everything else
         counter = counter % 15
