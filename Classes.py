@@ -21,6 +21,7 @@ class Player(pygame.sprite.Sprite):
         self.littlebite = pygame.image.load('Sprites/pacman_orig.png').convert_alpha()
         self.circle = pygame.image.load('Sprites/pacman_circle.png').convert_alpha()
         self.bigbite = pygame.image.load('Sprites/pacman_bigbite.png').convert_alpha()
+        self.die0 = pygame.image.load('Sprites/die0.png').convert_alpha()
         self.die1 = pygame.image.load('Sprites/die1.png').convert_alpha()
         self.die2 = pygame.image.load('Sprites/die2.png').convert_alpha()
         self.die3 = pygame.image.load('Sprites/die3.png').convert_alpha()
@@ -89,6 +90,7 @@ class Player(pygame.sprite.Sprite):
             self.rot_center(self.rot)
 
     def dieAnimation(self, sprites):
+        self.image = self.die0
         for img in [self.die1, self.die2, self.die3, self.die4, self.die5, self.die6, self.die7, self.die8, self.die9, self.die10, self.die11]:
             Functions.screen.fill(BLACK)
             sprites.draw(Functions.screen)
