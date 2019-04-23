@@ -32,7 +32,6 @@ class Player(pygame.sprite.Sprite):
 
     # makes chewing animation when pacman is in motion
     def chompchomp(self, counter):
-        chompSound = pygame.mixer.Sound("Sounds/pacman_chomp.wav")
 
         if counter == 0:
             self.imageOrig = self.pacman_big
@@ -41,8 +40,6 @@ class Player(pygame.sprite.Sprite):
         if counter == 10:
             self.imageOrig = self.pacman_circle
 
-        if counter//2 == 0:
-            pygame.mixer.Sound.play(chompSound)
 
     # makes chewing animation when pacman is not moving
     def StillChompChomp(self, counter, rot):
@@ -108,6 +105,8 @@ class Player(pygame.sprite.Sprite):
 
     # rules for when he collides with walls and barriers
     def collide(self, x, y, platforms, sprites,power_list,fruit_list, score):
+        chompSound = pygame.mixer.Sound("Sounds/pacman_chomp.wav")
+
         for s in sprites:
             if s not in platforms:
                 if s != self.rect and self.rect.collidepoint(s.rect.center) and s in power_list:
@@ -123,6 +122,7 @@ class Player(pygame.sprite.Sprite):
                     fruit_list.remove(s)
 
                 elif s != self.rect and self.rect.collidepoint(s.rect.center):
+                    pygame.mixer.Sound.play(chompSound)
                     sprites.remove(s)
                     score += 10
                     print(score)
