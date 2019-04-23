@@ -9,7 +9,9 @@ pacman_circle = pygame.image.load('Sprites/pacman_circle.png').convert_alpha()
 pacman_big = pygame.image.load('Sprites/pacman_bigbite.png').convert_alpha()
 BACKGROUND_IMAGE = 'Sprites/bg.png'
 
+
 def map():
+
     global WIN_HEIGHT, WIN_WIDTH
     pygame.init()
     screen = pygame.display.set_mode((WIN_WIDTH,WIN_HEIGHT), FLAGS, DEPTH)
@@ -23,6 +25,7 @@ def map():
     sprites = pygame.sprite.Group()
     power_list = []
     fruit_list = []
+    ghost_list = []
     platforms = []
 
     x = 0
@@ -59,19 +62,19 @@ def map():
         for col in row:
             if col == "B":
                 ghost = Ghost(x, y, "Sprites/BLUE_GHOST_UP.png")
-                power_list.append(ghost)
+                ghost_list.append(ghost)
                 sprites.add(ghost)
             if col == "Q":
                 ghost = Ghost(x, y, "Sprites/PINK_GHOST_DOWN.png")
-                power_list.append(ghost)
+                ghost_list.append(ghost)
                 sprites.add(ghost)
             if col == "O":
                 ghost = Ghost(x, y, "Sprites/ORANGE_GHOST_UP.png")
-                power_list.append(ghost)
+                ghost_list.append(ghost)
                 sprites.add(ghost)
             if col == "R":
                 ghost = Ghost(x, y, "Sprites/RED_GHOST_LEFT.png")
-                power_list.append(ghost)
+                ghost_list.append(ghost)
                 sprites.add(ghost)
             if col == "Y":
                 power = Power(x, y)
@@ -91,7 +94,7 @@ def map():
             if col == "M":
                 if playerFlag:
                     # Give the player an initial position (x and y) then width and height
-                    player = Player(pacman_little, x, y, PLAYER_WIDTH, PLAYER_HEIGHT)
+                    player = Player(pacman_little, x, y, PLAYER_WIDTH, PLAYER_HEIGHT, 3, 0)
                     sprites.add(player)
                     # Do not allow another player to be added
                     playerFlag = False
@@ -110,12 +113,10 @@ def map():
     repeatedImageWidth = int(WIN_WIDTH)
     myImage = pygame.transform.scale(bgIMG, (repeatedImageWidth, WIN_HEIGHT))
 
-    score = 0
-    lives = 3
     counter = 0
     while 1:
         counter += 1
-        timer.tick(60)
+        timer.tick(90)
         pygame.event.pump()
         for e in pygame.event.get():
 
@@ -147,7 +148,7 @@ def map():
 
         # update player, draw everything else
         counter = counter % 15
-        score = player.update(up, down, left, right, platforms, counter, sprites, power_list, score, fruit_list)
+        player.update(up, down, left, right, platforms, counter, sprites, power_list, fruit_list, ghost_list)
         sprites.draw(screen)
-        Functions.HUD(lives, score)
+        Functions.HUD(player.lives, player.score)
         pygame.display.update()

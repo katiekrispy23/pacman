@@ -78,50 +78,45 @@ def HUD(lives, score):
     TextSurf, gameOverRect = text_objects("Score: " + str(score), smallText, WHITE)
     gameOverRect.center = (h // 16 + h // 32, v // 32)
     screen.blit(TextSurf, gameOverRect)
-    
-# def gameOver(all_sprites_list, score, lives):
-#     timer.tick(15)
-#     imgOrig = pygame.image.load('explosion.png')
-#     img = pygame.transform.scale(imgOrig, (h, v))
-#     lose = True
-#     # what happens when you lose
-#     while lose:
-#         for event in pygame.event.get():
-#             keys = pygame.key.get_pressed()
-#             # exit lose screen
-#             if (event.type == pygame.QUIT) or (keys[pygame.K_ESCAPE]):
-#                 pygame.quit()
-#                 quit()
-#             # replay
-#             if keys[pygame.K_r]:
-#                 all_sprites_list.empty()
-#                 lives = 3
-#                 score = 0
-#                 intro()
-#                 # launch game again
-#                 # gameloop(lives, score)
-#                 # run "main()"?
-# 
-#             # if you run out of lives
-#         if lives == 0:
-#             # lose screen
-#             screen.fill(BLACK)
-#             # text for lose screen
-#             mediumText = pygame.font.Font('freesansbold.ttf', 32)
-#             smallText = pygame.font.Font('freesansbold.ttf', 16)
-#             # blit image to screen at position 0,0
-#             screen.blit(img, (0, 0))
-#             # add other text to end screen
-#             TextSurf, gameOverRect = text_objects("score: " + str(score), mediumText, WHITE)
-#             gameOverRect.center = (h // 2, v // 24)
-#             screen.blit(TextSurf, gameOverRect)
-# 
-#             TextSurf, ExitRect = text_objects("Press \'r\' to Restart, or \'esc\' to Exit", smallText, WHITE)
-#             ExitRect.center = (h // 2, v - .5 * v // 16)
-#             screen.blit(TextSurf, ExitRect)
-#         else:
-#             all_sprites_list.empty()
-#             # launch game again
-#             # gameloop(lives, score)
-#             # run "intro()"?
-#         pygame.display.update()
+
+
+def gameOver(sprites, score):
+    timer.tick(15)
+    imgOrig = pygame.image.load('Sprites/gameover.png')
+    img = pygame.transform.scale(imgOrig, (h, v))
+    lose = True
+    # what happens when you lose
+    while lose:
+        for event in pygame.event.get():
+            keys = pygame.key.get_pressed()
+            # exit lose screen
+            if (event.type == pygame.QUIT) or (keys[pygame.K_ESCAPE]):
+                pygame.quit()
+                quit()
+            # replay
+            if keys[pygame.K_r]:
+                sprites.empty()
+                lives = 3
+                score = 0
+                intro()
+                # launch game again
+                Map.map()
+
+            # if you run out of lives
+        # lose screen
+        screen.fill(BLACK)
+        # text for lose screen
+        mediumText = pygame.font.Font('freesansbold.ttf', 32)
+        smallText = pygame.font.Font('freesansbold.ttf', 16)
+        # blit image to screen at position 0,0
+        screen.blit(img, (0, 0))
+        # add other text to end screen
+        TextSurf, gameOverRect = text_objects("score: " + str(score), mediumText, WHITE)
+        gameOverRect.center = (h // 2, v // 24)
+        screen.blit(TextSurf, gameOverRect)
+
+        TextSurf, ExitRect = text_objects("Press \'r\' to Restart, or \'esc\' to Exit", smallText, WHITE)
+        ExitRect.center = (h // 2, v - .5 * v // 16)
+        screen.blit(TextSurf, ExitRect)
+
+        pygame.display.update()

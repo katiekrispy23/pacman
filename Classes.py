@@ -1,12 +1,14 @@
 import pygame
 from pygame import *
 from PygameSettings import *
-
+import Functions
 
 # Player class. Change this to include an image
 class Player(pygame.sprite.Sprite):
-    def __init__(self, imgFile, x, y, width, height):
+    def __init__(self, imgFile, x, y, width, height, lives, score):
         super().__init__()
+        self.score = score
+        self.lives = lives
         self.width = width
         self.height = height
         self.x = 0
@@ -27,7 +29,7 @@ class Player(pygame.sprite.Sprite):
 
     # this function will rotate our pacman based on what direction he is going (that way his mouth is always pointing
     # the right way)
-    def rot_center(self, x, y, angle):
+    def rot_center(self, angle):
         self.image = pygame.transform.rotate(self.imageOrig, angle)
 
     # makes chewing animation when pacman is in motion
@@ -40,41 +42,50 @@ class Player(pygame.sprite.Sprite):
         if counter == 10:
             self.imageOrig = self.pacman_circle
 
+    def reset(self, lives, sprites):
+        self.lives -= 1
+        if self.lives == 0:
+            Functions.gameOver(sprites, self.score)
+        else:
+            self.rect.centerx, self.rect.centery = 302, 478
+            self.x, self.y = 0, 0
+        return lives
+
 
     # makes chewing animation when pacman is not moving
     def StillChompChomp(self, counter, rot):
         if counter == 0:
             self.imageOrig = self.pacman_big
-            self.rot_center(self.rect.centerx, self.rect.centery, self.rot)
+            self.rot_center( self.rot)
         if counter == 5:
             self.imageOrig = self.pacman_little
-            self.rot_center(self.rect.centerx, self.rect.centery, self.rot)
+            self.rot_center( self.rot)
         if counter == 10:
             self.imageOrig = self.pacman_circle
-            self.rot_center(self.rect.centerx, self.rect.centery, self.rot)
+            self.rot_center( self.rot)
 
     # updates the location and speed based on keyboard inputs
-    def update(self, up, down, left, right, platforms, counter, sprites, power_list, score, fruit_list):
+    def update(self, up, down, left, right, platforms, counter, sprites, power_list, fruit_list, ghost_list):
         # Start with no change in x-position... see what happened
         if up:
             self.rot = 90
             self.chompchomp(counter)
-            self.rot_center(self.rect.centerx, self.rect.centery, self.rot)
+            self.rot_center( self.rot)
             self.y = -MOVE_VEL
         elif down:
             self.rot = 270
             self.chompchomp(counter)
-            self.rot_center(self.rect.centerx,self.rect.centery, self.rot)
+            self.rot_center(self.rot)
             self.y = MOVE_VEL
         elif left:
             self.rot = 180
             self.chompchomp(counter)
-            self.rot_center(self.rect.centerx,self.rect.centery, self.rot)
+            self.rot_center(self.rot)
             self.x = -MOVE_VEL
         elif right:
             self.rot = 0
             self.chompchomp(counter)
-            self.rot_center(self.rect.centerx,self.rect.centery, self.rot)
+            self.rot_center(self.rot)
             self.x = MOVE_VEL
 
         # even if not moving should still be chomping
@@ -91,7 +102,7 @@ class Player(pygame.sprite.Sprite):
         self.rect.left += self.x
         
         # do x-axis collisions
-        score = self.collide(self.x, 0, platforms, sprites, power_list, fruit_list, score)
+        self.collide(self.x, 0, platforms, sprites, power_list, fruit_list, ghost_list)
 
         # increment in y direction
         self.rect.top += self.y
@@ -100,32 +111,31 @@ class Player(pygame.sprite.Sprite):
         self.onGround = False
 
         # do y-axis collisions
-        score = self.collide(0, self.y, platforms, sprites, power_list, fruit_list, score)
-        return score
+        self.collide(0, self.y, platforms, sprites, power_list, fruit_list, ghost_list)
+        # return score
 
     # rules for when he collides with walls and barriers
-    def collide(self, x, y, platforms, sprites,power_list,fruit_list, score):
+    def collide(self, x, y, platforms, sprites, power_list, fruit_list, ghost_list):
         chompSound = pygame.mixer.Sound("Sounds/pacman_chomp.wav")
 
         for s in sprites:
             if s not in platforms:
+                if s != self.rect and self.rect.collidepoint(s.rect.center) and s in ghost_list:
+                    self.reset(self.lives, sprites)
                 if s != self.rect and self.rect.collidepoint(s.rect.center) and s in power_list:
-                    score += 50
-                    print(score)
+                    self.score += 50
                     sprites.remove(s)
                     power_list.remove(s)
 
                 elif s != self.rect and self.rect.collidepoint(s.rect.center) and s in fruit_list:
-                    score += 100
-                    print(score)
+                    self.score += 100
                     sprites.remove(s)
                     fruit_list.remove(s)
 
                 elif s != self.rect and self.rect.collidepoint(s.rect.center):
                     pygame.mixer.Sound.play(chompSound)
                     sprites.remove(s)
-                    score += 10
-                    print(score)
+                    self.score += 10
 
         for p in platforms:
             if pygame.sprite.collide_rect(self, p):
@@ -145,7 +155,7 @@ class Player(pygame.sprite.Sprite):
                     self.rect.top = p.rect.bottom
                     self.y = 0
                     # print("collide top")
-        return score
+        # return score
 
 
 # platform class - used in Map()
