@@ -117,10 +117,13 @@ class Player(pygame.sprite.Sprite):
     # rules for when he collides with walls and barriers
     def collide(self, x, y, platforms, sprites, power_list, fruit_list, ghost_list):
         chompSound = pygame.mixer.Sound("Sounds/pacman_chomp.wav")
+        fruitSound = pygame.mixer.Sound("Sounds/pacman_eatfruit.wav")
+        dieSound = pygame.mixer.Sound("Sounds/pacman_death.wav")
 
         for s in sprites:
             if s not in platforms:
                 if s != self.rect and self.rect.collidepoint(s.rect.center) and s in ghost_list:
+                    pygame.mixer.Sound.play(dieSound)
                     self.reset(self.lives, sprites)
                 if s != self.rect and self.rect.collidepoint(s.rect.center) and s in power_list:
                     self.score += 50
@@ -128,6 +131,7 @@ class Player(pygame.sprite.Sprite):
                     power_list.remove(s)
 
                 elif s != self.rect and self.rect.collidepoint(s.rect.center) and s in fruit_list:
+                    pygame.mixer.Sound.play(fruitSound)
                     self.score += 100
                     sprites.remove(s)
                     fruit_list.remove(s)
