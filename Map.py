@@ -122,8 +122,7 @@ def map():
     counter = 0
     while 1:
         counter += 1
-        timer.tick(90)
-        pygame.event.pump()
+        timer.tick(60)
         for e in pygame.event.get():
 
             if e.type == QUIT:
