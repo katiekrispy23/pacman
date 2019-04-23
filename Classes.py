@@ -65,7 +65,7 @@ class Player(pygame.sprite.Sprite):
             self.rot_center( self.rot)
 
     # updates the location and speed based on keyboard inputs
-    def update(self, up, down, left, right, platforms, counter, sprites, power_list, fruit_list, ghost_list):
+    def update(self, up, down, left, right, platforms, counter, sprites, power_list, fruit_list, ghost_list, barriers):
         # Start with no change in x-position... see what happened
         if up:
             self.rot = 90
@@ -102,7 +102,7 @@ class Player(pygame.sprite.Sprite):
         self.rect.left += self.x
         
         # do x-axis collisions
-        self.collide(self.x, 0, platforms, sprites, power_list, fruit_list, ghost_list)
+        self.collide(self.x, 0, platforms, sprites, power_list, fruit_list, ghost_list, barriers)
 
         # increment in y direction
         self.rect.top += self.y
@@ -111,11 +111,11 @@ class Player(pygame.sprite.Sprite):
         self.onGround = False
 
         # do y-axis collisions
-        self.collide(0, self.y, platforms, sprites, power_list, fruit_list, ghost_list)
+        self.collide(0, self.y, platforms, sprites, power_list, fruit_list, ghost_list, barriers)
         # return score
 
     # rules for when he collides with walls and barriers
-    def collide(self, x, y, platforms, sprites, power_list, fruit_list, ghost_list):
+    def collide(self, x, y, platforms, sprites, power_list, fruit_list, ghost_list, barriers):
         chompSound = pygame.mixer.Sound("Sounds/pacman_chomp.wav")
         fruitSound = pygame.mixer.Sound("Sounds/pacman_eatfruit.wav")
         dieSound = pygame.mixer.Sound("Sounds/pacman_death.wav")
@@ -141,25 +141,20 @@ class Player(pygame.sprite.Sprite):
                     sprites.remove(s)
                     self.score += 10
 
-        for p in platforms:
+        for p in barriers:
             if pygame.sprite.collide_rect(self, p):
                 if x > 0:
                     self.rect.right = p.rect.left
                     self.x = 0
-                    # print ("collide right")
                 if x < 0:
                     self.rect.left = p.rect.right
                     self.x = 0
-                    # print ("collide left")
                 if y > 0:
                     self.rect.bottom = p.rect.top
                     self.y = 0
-                    # print("collide bottom"
                 if y < 0:
                     self.rect.top = p.rect.bottom
                     self.y = 0
-                    # print("collide top")
-        # return score
 
 
 # platform class - used in Map()
@@ -169,6 +164,18 @@ class Platform(pygame.sprite.Sprite):
         self.image = Surface((BLOCK_WIDTH, BLOCK_HEIGHT))
         self.image.convert()
         self.image.fill(PLATFORM_COLOR)
+        self.rect = Rect(x, y, BLOCK_WIDTH, BLOCK_HEIGHT)
+
+    def update(self):
+        pass
+
+# barrier class - used in Map()
+class Barrier(pygame.sprite.Sprite):
+    def __init__(self, x, y):
+        super().__init__()
+        self.image = Surface((BLOCK_WIDTH, BLOCK_HEIGHT // 3))
+        self.image.convert()
+        self.image.fill(PINK)
         self.rect = Rect(x, y, BLOCK_WIDTH, BLOCK_HEIGHT)
 
     def update(self):

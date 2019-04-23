@@ -27,6 +27,7 @@ def map():
     fruit_list = []
     ghost_list = []
     platforms = []
+    barriers = []
 
     x = 0
     y = 0
@@ -41,8 +42,8 @@ def map():
             "PCPPCPCPPPPPCPCPPCP",
             "PCCCCPCCCPCCCPCCCCP",
             "PPPPCPPPCPCPPPCPPPP",
-            "PPPPCP   R   PCPPPP",
-            "PPPPCP PP PP PCPPPP",
+            "PPPPCP R     PCPPPP",
+            "PPPPCP PPDPP PCPPPP",
             "    C  PBQOP  C    ",
             "PPPPCP PPPPP PCPPPP",
             "PPPPCP   F   PCPPPP",
@@ -82,6 +83,7 @@ def map():
                 sprites.add(power)
             if col == "P":
                 p = Platform(x, y)
+                barriers.append(p)
                 platforms.append(p)
                 sprites.add(p)
             if col == "C":
@@ -91,6 +93,10 @@ def map():
                 fruit = Fruit(x, y)
                 fruit_list.append(fruit)
                 sprites.add(fruit)
+            if col == "D":
+                barrier = Barrier(x, y)
+                barriers.append(barrier)
+                sprites.add(barrier)
             if col == "M":
                 if playerFlag:
                     # Give the player an initial position (x and y) then width and height
@@ -148,7 +154,7 @@ def map():
 
         # update player, draw everything else
         counter = counter % 15
-        player.update(up, down, left, right, platforms, counter, sprites, power_list, fruit_list, ghost_list)
+        player.update(up, down, left, right, platforms, counter, sprites, power_list, fruit_list, ghost_list, barriers)
         sprites.draw(screen)
         Functions.HUD(player.lives, player.score)
         pygame.display.update()
