@@ -1,4 +1,4 @@
-import pygame
+import pygame, time
 from pygame import *
 from PygameSettings import *
 import Functions
@@ -16,16 +16,41 @@ class Player(pygame.sprite.Sprite):
         self.rot = 0
         self.onGround = False
         self.hitTop = False
-        self.imageOrig = pygame.transform.scale(imgFile, (WIN_WIDTH // 20, WIN_WIDTH // 20))
-        self.image = pygame.transform.scale(imgFile, (WIN_WIDTH // 20, WIN_WIDTH // 20))
+        self.imageOrig = self.transformpic(imgFile)
+        self.image = self.transformpic(imgFile)
         self.littlebite = pygame.image.load('Sprites/pacman_orig.png').convert_alpha()
         self.circle = pygame.image.load('Sprites/pacman_circle.png').convert_alpha()
         self.bigbite = pygame.image.load('Sprites/pacman_bigbite.png').convert_alpha()
-
-        self.pacman_little = pygame.transform.scale(self.littlebite, (WIN_WIDTH // 20, WIN_WIDTH // 20))
-        self.pacman_circle = pygame.transform.scale(self.circle, (WIN_WIDTH // 20, WIN_WIDTH // 20))
-        self.pacman_big = pygame.transform.scale(self.bigbite, (WIN_WIDTH // 20, WIN_WIDTH // 20))
+        self.die1 = pygame.image.load('Sprites/die1.png').convert_alpha()
+        self.die2 = pygame.image.load('Sprites/die2.png').convert_alpha()
+        self.die3 = pygame.image.load('Sprites/die3.png').convert_alpha()
+        self.die4 = pygame.image.load('Sprites/die4.png').convert_alpha()
+        self.die5 = pygame.image.load('Sprites/die5.png').convert_alpha()
+        self.die6 = pygame.image.load('Sprites/die6.png').convert_alpha()
+        self.die7 = pygame.image.load('Sprites/die7.png').convert_alpha()
+        self.die8 = pygame.image.load('Sprites/die8.png').convert_alpha()
+        self.die9 = pygame.image.load('Sprites/die9.png').convert_alpha()
+        self.die10 = pygame.image.load('Sprites/die10.png').convert_alpha()
+        self.die11 = pygame.image.load('Sprites/die11.png').convert_alpha()
+        self.die1 = self.transformpic(self.die1)
+        self.die2 = self.transformpic(self.die2)
+        self.die3 = self.transformpic(self.die3)
+        self.die4 = self.transformpic(self.die4)
+        self.die5 = self.transformpic(self.die5)
+        self.die6 = self.transformpic(self.die6)
+        self.die7 = self.transformpic(self.die7)
+        self.die8 = self.transformpic(self.die8)
+        self.die9 = self.transformpic(self.die9)
+        self.die10 = self.transformpic(self.die10)
+        self.die11 = self.transformpic(self.die11)
+        self.pacman_little = self.transformpic(self.littlebite)
+        self.pacman_circle = self.transformpic(self.circle)
+        self.pacman_big = self.transformpic(self.bigbite)
         self.rect = Rect(x, y, self.width, self.height)
+
+    def transformpic(self, image):
+        image = pygame.transform.scale(image, (WIN_WIDTH // 20, WIN_WIDTH // 20))
+        return image
 
     # this function will rotate our pacman based on what direction he is going (that way his mouth is always pointing
     # the right way)
@@ -51,18 +76,25 @@ class Player(pygame.sprite.Sprite):
             self.x, self.y = 0, 0
         return lives
 
-
     # makes chewing animation when pacman is not moving
-    def StillChompChomp(self, counter, rot):
+    def StillChompChomp(self, counter):
         if counter == 0:
             self.imageOrig = self.pacman_big
-            self.rot_center( self.rot)
+            self.rot_center(self.rot)
         if counter == 5:
             self.imageOrig = self.pacman_little
-            self.rot_center( self.rot)
+            self.rot_center(self.rot)
         if counter == 10:
             self.imageOrig = self.pacman_circle
-            self.rot_center( self.rot)
+            self.rot_center(self.rot)
+
+    def dieAnimation(self, sprites):
+        for img in [self.die1, self.die2, self.die3, self.die4, self.die5, self.die6, self.die7, self.die8, self.die9, self.die10, self.die11]:
+            Functions.screen.fill(BLACK)
+            sprites.draw(Functions.screen)
+            Functions.screen.blit(img, (self.rect.x, self.rect.y))
+            time.delay(100)
+            pygame.display.update()
 
     # updates the location and speed based on keyboard inputs
     def update(self, up, down, left, right, platforms, counter, sprites, power_list, fruit_list, ghost_list, barriers):
@@ -90,7 +122,7 @@ class Player(pygame.sprite.Sprite):
 
         # even if not moving should still be chomping
         else:
-            self.StillChompChomp(counter, self.rot)
+            self.StillChompChomp(counter)
 
         # if pacman goes through the tube that wraps the screen
         if self.rect.right > WIN_WIDTH:
@@ -124,6 +156,7 @@ class Player(pygame.sprite.Sprite):
             if s not in platforms:
                 if s != self.rect and self.rect.collidepoint(s.rect.center) and s in ghost_list:
                     pygame.mixer.Sound.play(dieSound)
+                    self.dieAnimation(sprites)
                     self.reset(self.lives, sprites)
                 if s != self.rect and self.rect.collidepoint(s.rect.center) and s in power_list:
                     self.score += 50

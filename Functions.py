@@ -38,7 +38,7 @@ def intro():
             if keys[pygame.K_RETURN]:
                 return
         # intro screen display
-        screen.fill(BLACK)
+        # screen.fill(BLACK)
         # text size for intro screen
 
         # blits image to screen
@@ -85,6 +85,8 @@ def gameOver(sprites, score):
     imgOrig = pygame.image.load('Sprites/gameover.png')
     img = pygame.transform.scale(imgOrig, (h, v))
     lose = True
+    mediumText = pygame.font.Font('freesansbold.ttf', 32)
+    smallText = pygame.font.Font('freesansbold.ttf', 16)
     # what happens when you lose
     while lose:
         for event in pygame.event.get():
@@ -104,10 +106,9 @@ def gameOver(sprites, score):
 
             # if you run out of lives
         # lose screen
-        screen.fill(BLACK)
+        # screen.fill(BLACK)
         # text for lose screen
-        mediumText = pygame.font.Font('freesansbold.ttf', 32)
-        smallText = pygame.font.Font('freesansbold.ttf', 16)
+
         # blit image to screen at position 0,0
         screen.blit(img, (0, 0))
         # add other text to end screen

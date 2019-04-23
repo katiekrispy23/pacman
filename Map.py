@@ -149,11 +149,13 @@ def map():
 
         # draw background. This is a repeated background
         for x in range(0,int(total_level_width)):
-            screen.blit(myImage,(x*repeatedImageWidth,0))
+            screen.blit(myImage, (x*repeatedImageWidth, 0))
 
         # update player, draw everything else
         counter = counter % 15
         player.update(up, down, left, right, platforms, counter, sprites, power_list, fruit_list, ghost_list, barriers)
         sprites.draw(screen)
         Functions.HUD(player.lives, player.score)
+
+
         pygame.display.update()
