@@ -122,7 +122,7 @@ def map():
     pygame.mixer.Sound.play(introMusic)
     sprites.draw(screen)
     pygame.display.update()
-    time.delay(4000)
+    pygame.time.delay(4000)
 
     counter = 0
     while 1:

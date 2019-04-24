@@ -92,20 +92,15 @@ def gameOver(sprites, score):
             # exit lose screen
             if (event.type == pygame.QUIT) or (keys[pygame.K_ESCAPE]):
                 pygame.quit()
-                quit()
+                sys.exit()
+
             # replay
             if keys[pygame.K_r]:
                 sprites.empty()
-                lives = 3
                 score = 0
                 intro()
                 # launch game again
                 Map.map()
-
-            # if you run out of lives
-        # lose screen
-        # screen.fill(BLACK)
-        # text for lose screen
 
         # blit image to screen at position 0,0
         screen.blit(img, (0, 0))

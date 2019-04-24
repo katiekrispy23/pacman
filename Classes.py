@@ -1,5 +1,6 @@
-import pygame, time
-from pygame import *
+import pygame
+import time
+# from pygame import *
 from PygameSettings import *
 import Functions
 import Sprites
@@ -15,10 +16,9 @@ class Player(pygame.sprite.Sprite):
         self.x = 0
         self.y = 0
         self.rot = 0
-        self.onGround = False
-        self.hitTop = False
-        self.imageOrig = self.transformpic(imgFile)
-        self.image = self.transformpic(imgFile)
+        self.PowerPac = False
+
+        # TODO: Clean this up by putting all image loads into a "sprite.py" file and importing at top
         self.littlebite = pygame.image.load('Sprites/pacman_orig.png').convert_alpha()
         self.circle = pygame.image.load('Sprites/pacman_circle.png').convert_alpha()
         self.bigbite = pygame.image.load('Sprites/pacman_bigbite.png').convert_alpha()
@@ -35,6 +35,13 @@ class Player(pygame.sprite.Sprite):
         self.die10 = pygame.image.load('Sprites/die10.png').convert_alpha()
         self.die11 = pygame.image.load('Sprites/die11.png').convert_alpha()
         self.onehundred = pygame.image.load('Sprites/oneHundred.png').convert_alpha()
+
+        self.blueTest = pygame.image.load('Sprites/POWER_GHOST_BLUE.png').convert_alpha()
+        self.blueTest = pygame.transform.scale(self.blueTest, (BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6, BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6))
+
+
+        self.imageOrig = self.transformpic(imgFile)
+        self.image = self.transformpic(imgFile)
         self.onehundred = self.transformpic(self.onehundred)
         self.die1 = self.transformpic(self.die1)
         self.die2 = self.transformpic(self.die2)
@@ -50,7 +57,7 @@ class Player(pygame.sprite.Sprite):
         self.pacman_little = self.transformpic(self.littlebite)
         self.pacman_circle = self.transformpic(self.circle)
         self.pacman_big = self.transformpic(self.bigbite)
-        self.rect = Rect(x, y, self.width, self.height)
+        self.rect = pygame.Rect(x, y, self.width, self.height)
 
     def transformpic(self, image):
         image = pygame.transform.scale(image, (WIN_WIDTH // 20, WIN_WIDTH // 20))
@@ -101,7 +108,7 @@ class Player(pygame.sprite.Sprite):
             Functions.screen.fill(BLACK)
             sprites.draw(Functions.screen)
             Functions.screen.blit(img, (self.rect.x, self.rect.y))
-            time.delay(100)
+            pygame.time.delay(100)
             pygame.display.update()
 
     # this function will control the points and animations associated with the fruit
@@ -113,7 +120,23 @@ class Player(pygame.sprite.Sprite):
         sprites.draw(Functions.screen)
         Functions.screen.blit(self.onehundred, (self.rect.x, self.rect.y))
         pygame.display.update()
-        time.delay(250)
+        pygame.time.delay(250)
+
+    # TODO: When a power pellet is eaten, the ghost change blue correctly, but it pauses the whole game.
+    # TODO: fix so that the game continues while the "power mode" is engaged
+    # houses all of the things needed when pacman has eaten a power pellet
+    def PowerModeFunction(self, ghost_list, sprites):
+        self.PowerPac = True
+        t_end = time.time() + 8
+        while time.time() < t_end:
+            for g in ghost_list:
+                g.image = self.blueTest
+            Functions.screen.fill(BLACK)
+            sprites.draw(Functions.screen)
+            pygame.display.update()
+        for g in ghost_list:
+            g.image = g.imageOrig
+        self.PowerPac = False
 
     # updates the location and speed based on keyboard inputs
     def update(self, up, down, left, right, platforms, counter, sprites, power_list, fruit_list, ghost_list, barriers):
@@ -178,6 +201,7 @@ class Player(pygame.sprite.Sprite):
                     self.score += 50
                     sprites.remove(s)
                     power_list.remove(s)
+                    self.PowerModeFunction(ghost_list, sprites)
 
                 # collide with fruit
                 elif s != self.rect and self.rect.collidepoint(s.rect.center) and s in fruit_list:
@@ -228,10 +252,10 @@ class Player(pygame.sprite.Sprite):
 class Platform(pygame.sprite.Sprite):
     def __init__(self, x, y):
         super().__init__()
-        self.image = Surface((BLOCK_WIDTH, BLOCK_HEIGHT))
+        self.image = pygame.Surface((BLOCK_WIDTH, BLOCK_HEIGHT))
         self.image.convert()
         self.image.fill(PLATFORM_COLOR)
-        self.rect = Rect(x, y, BLOCK_WIDTH, BLOCK_HEIGHT)
+        self.rect = pygame.Rect(x, y, BLOCK_WIDTH, BLOCK_HEIGHT)
 
     def update(self):
         pass
@@ -241,10 +265,10 @@ class Platform(pygame.sprite.Sprite):
 class Barrier(pygame.sprite.Sprite):
     def __init__(self, x, y):
         super().__init__()
-        self.image = Surface((BLOCK_WIDTH, BLOCK_HEIGHT // 3))
+        self.image = pygame.Surface((BLOCK_WIDTH, BLOCK_HEIGHT // 3))
         self.image.convert()
         self.image.fill(PINK)
-        self.rect = Rect(x, y, BLOCK_WIDTH, BLOCK_HEIGHT)
+        self.rect = pygame.Rect(x, y, BLOCK_WIDTH, BLOCK_HEIGHT)
 
     def update(self):
         pass
@@ -253,10 +277,10 @@ class Barrier(pygame.sprite.Sprite):
 class Pellets(pygame.sprite.Sprite):
     def __init__(self, x, y):
         super().__init__()
-        self.image = Surface((BLOCK_WIDTH // 3, BLOCK_HEIGHT // 3))
+        self.image = pygame.Surface((BLOCK_WIDTH // 3, BLOCK_HEIGHT // 3))
         self.image.convert()
         self.image.fill(PACMAN_PEACH)
-        self.rect = Rect(x + BLOCK_WIDTH // 3, y + BLOCK_WIDTH // 3, BLOCK_WIDTH // 3, BLOCK_HEIGHT // 3)
+        self.rect = pygame.Rect(x + BLOCK_WIDTH // 3, y + BLOCK_WIDTH // 3, BLOCK_WIDTH // 3, BLOCK_HEIGHT // 3)
 
 
 class Power(pygame.sprite.Sprite):
@@ -266,7 +290,7 @@ class Power(pygame.sprite.Sprite):
         self.y = 0
         self.imageOrig = pygame.image.load('Sprites/power_pellet.png').convert_alpha()
         self.image = pygame.transform.scale(self.imageOrig, (BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6, BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6))
-        self.rect = Rect(x + BLOCK_WIDTH // 6, y + BLOCK_WIDTH // 8, BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6, BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6)
+        self.rect = pygame.Rect(x + BLOCK_WIDTH // 6, y + BLOCK_WIDTH // 8, BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6, BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6)
 
 
 class Fruit(pygame.sprite.Sprite):
@@ -276,7 +300,7 @@ class Fruit(pygame.sprite.Sprite):
         self.y = 0
         self.imageOrig = pygame.image.load('Items/ITEM_CHERRY.png').convert_alpha()
         self.image = pygame.transform.scale(self.imageOrig, (BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6, BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6))
-        self.rect = Rect(x + BLOCK_WIDTH // 4, y + BLOCK_WIDTH // 4, BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6, BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6)
+        self.rect = pygame.Rect(x + BLOCK_WIDTH // 4, y + BLOCK_WIDTH // 4, BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6, BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6)
 
 
 class Ghost(pygame.sprite.Sprite):
@@ -285,5 +309,6 @@ class Ghost(pygame.sprite.Sprite):
         self.x = 0
         self.y = 0
         self.imageOrig = pygame.image.load(sprite).convert_alpha()
+        self.imageOrig = pygame.transform.scale(self.imageOrig, (BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6, BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6))
         self.image = pygame.transform.scale(self.imageOrig, (BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6, BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6))
-        self.rect = Rect(x + BLOCK_WIDTH // 4, y + BLOCK_WIDTH // 4, BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6, BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6)
+        self.rect = pygame.Rect(x + BLOCK_WIDTH // 4, y + BLOCK_WIDTH // 4, BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6, BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6)
