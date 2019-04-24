@@ -71,6 +71,8 @@ class Player(pygame.sprite.Sprite):
         if counter == 10:
             self.imageOrig = self.pacman_circle
 
+    # function to reset pacman to original position and decrease lives by 1
+    # if there is no more lives, it calls to the gameOver() loop to show end screen and score
     def reset(self, lives, sprites):
         self.lives -= 1
         if self.lives == 0:
@@ -92,13 +94,14 @@ class Player(pygame.sprite.Sprite):
             self.imageOrig = self.pacman_circle
             self.rot_center(self.rot)
 
+    # in charge of the animation when pacman hits a ghost and he "pops"
     def dieAnimation(self, sprites):
         self.image = self.die0
         for img in [self.die1, self.die2, self.die3, self.die4, self.die5, self.die6, self.die7, self.die8, self.die9, self.die10, self.die11]:
             Functions.screen.fill(BLACK)
             sprites.draw(Functions.screen)
             Functions.screen.blit(img, (self.rect.x, self.rect.y))
-            time.delay(150)
+            time.delay(100)
             pygame.display.update()
 
     # this function will control the points and animations associated with the fruit
@@ -147,8 +150,8 @@ class Player(pygame.sprite.Sprite):
         # increment in y direction
         self.rect.top += self.y
 
-        # assuming we're in the air
-        self.onGround = False
+        # # assuming we're in the air
+        # self.onGround = False
 
         # do y-axis collisions
         self.collide(0, self.y, platforms, sprites, power_list, fruit_list, ghost_list, barriers)
@@ -203,17 +206,21 @@ class Player(pygame.sprite.Sprite):
                     self.y = 0
 
     def direction(self):
-        if self.x == MOVE_VEL:
+        # if pacman is moving right
+        if self.x == MOVE_VEL and self.y == 0:
             self.rot = 0
             self.rot_center(self.rot)
-        if self.x == -MOVE_VEL:
+        # if pacman is moving up
+        if self.y == -MOVE_VEL and self.x == 0:
+            self.rot = 90
+            self.rot_center(self.rot)
+        # if pacman is moving left
+        if self.x == -MOVE_VEL and self.y == 0:
             self.rot = 180
             self.rot_center(self.rot)
-        if self.y == MOVE_VEL:
+        # if pacman is moving down
+        if self.y == MOVE_VEL and self.x == 0:
             self.rot = 270
-            self.rot_center(self.rot)
-        if self.y == -MOVE_VEL:
-            self.rot = 90
             self.rot_center(self.rot)
 
 
