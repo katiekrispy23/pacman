@@ -24,8 +24,6 @@ def intro():
     img = pygame.transform.scale(imgOrig, (h, v - v // 16))
     smallText = pygame.font.Font('freesansbold.ttf', 16)
     medText = pygame.font.Font('freesansbold.ttf', 24)
-    introMusic = pygame.mixer.Sound("Sounds/pacman_beginning.wav")
-    pygame.mixer.Sound.play(introMusic)
     while intro:
         for event in pygame.event.get():
 

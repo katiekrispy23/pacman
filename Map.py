@@ -118,6 +118,11 @@ def map():
     bgIMG = pygame.image.load(BACKGROUND_IMAGE).convert_alpha()
     repeatedImageWidth = int(WIN_WIDTH)
     myImage = pygame.transform.scale(bgIMG, (repeatedImageWidth, WIN_HEIGHT))
+    introMusic = pygame.mixer.Sound("Sounds/pacman_beginning.wav")
+    pygame.mixer.Sound.play(introMusic)
+    sprites.draw(screen)
+    pygame.display.update()
+    time.delay(4000)
 
     counter = 0
     while 1:
@@ -156,6 +161,4 @@ def map():
         player.update(up, down, left, right, platforms, counter, sprites, power_list, fruit_list, ghost_list, barriers)
         sprites.draw(screen)
         Functions.HUD(player.lives, player.score)
-
-
         pygame.display.update()

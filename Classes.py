@@ -2,6 +2,7 @@ import pygame, time
 from pygame import *
 from PygameSettings import *
 import Functions
+import Sprites
 
 # Player class. Change this to include an image
 class Player(pygame.sprite.Sprite):
@@ -33,6 +34,8 @@ class Player(pygame.sprite.Sprite):
         self.die9 = pygame.image.load('Sprites/die9.png').convert_alpha()
         self.die10 = pygame.image.load('Sprites/die10.png').convert_alpha()
         self.die11 = pygame.image.load('Sprites/die11.png').convert_alpha()
+        self.onehundred = pygame.image.load('Sprites/oneHundred.png').convert_alpha()
+        self.onehundred = self.transformpic(self.onehundred)
         self.die1 = self.transformpic(self.die1)
         self.die2 = self.transformpic(self.die2)
         self.die3 = self.transformpic(self.die3)
@@ -95,31 +98,34 @@ class Player(pygame.sprite.Sprite):
             Functions.screen.fill(BLACK)
             sprites.draw(Functions.screen)
             Functions.screen.blit(img, (self.rect.x, self.rect.y))
-            time.delay(100)
+            time.delay(150)
             pygame.display.update()
+
+    # this function will control the points and animations associated with the fruit
+    def eatfruit(self, sprites, fruit_list, s):
+        self.score += 100
+        sprites.remove(s)
+        fruit_list.remove(s)
+        Functions.screen.fill(BLACK)
+        sprites.draw(Functions.screen)
+        Functions.screen.blit(self.onehundred, (self.rect.x, self.rect.y))
+        pygame.display.update()
+        time.delay(250)
 
     # updates the location and speed based on keyboard inputs
     def update(self, up, down, left, right, platforms, counter, sprites, power_list, fruit_list, ghost_list, barriers):
         # Start with no change in x-position... see what happened
         if up:
-            self.rot = 90
             self.chompchomp(counter)
-            self.rot_center( self.rot)
             self.y = -MOVE_VEL
-        elif down:
-            self.rot = 270
+        if down:
             self.chompchomp(counter)
-            self.rot_center(self.rot)
             self.y = MOVE_VEL
-        elif left:
-            self.rot = 180
+        if left:
             self.chompchomp(counter)
-            self.rot_center(self.rot)
             self.x = -MOVE_VEL
-        elif right:
-            self.rot = 0
+        if right:
             self.chompchomp(counter)
-            self.rot_center(self.rot)
             self.x = MOVE_VEL
 
         # even if not moving should still be chomping
@@ -147,6 +153,7 @@ class Player(pygame.sprite.Sprite):
         # do y-axis collisions
         self.collide(0, self.y, platforms, sprites, power_list, fruit_list, ghost_list, barriers)
         # return score
+        self.direction()
 
     # rules for when he collides with walls and barriers
     def collide(self, x, y, platforms, sprites, power_list, fruit_list, ghost_list, barriers):
@@ -156,21 +163,25 @@ class Player(pygame.sprite.Sprite):
 
         for s in sprites:
             if s not in platforms:
+
+                # Collide with Ghost
                 if s != self.rect and self.rect.collidepoint(s.rect.center) and s in ghost_list:
                     pygame.mixer.Sound.play(dieSound)
                     self.dieAnimation(sprites)
                     self.reset(self.lives, sprites)
+
+                # Collide with Power Pellet
                 if s != self.rect and self.rect.collidepoint(s.rect.center) and s in power_list:
                     self.score += 50
                     sprites.remove(s)
                     power_list.remove(s)
 
+                # collide with fruit
                 elif s != self.rect and self.rect.collidepoint(s.rect.center) and s in fruit_list:
                     pygame.mixer.Sound.play(fruitSound)
-                    self.score += 100
-                    sprites.remove(s)
-                    fruit_list.remove(s)
+                    self.eatfruit(sprites, fruit_list, s)
 
+                # collide with regular pellet
                 elif s != self.rect and self.rect.collidepoint(s.rect.center):
                     pygame.mixer.Sound.play(chompSound)
                     sprites.remove(s)
@@ -191,6 +202,20 @@ class Player(pygame.sprite.Sprite):
                     self.rect.top = p.rect.bottom
                     self.y = 0
 
+    def direction(self):
+        if self.x == MOVE_VEL:
+            self.rot = 0
+            self.rot_center(self.rot)
+        if self.x == -MOVE_VEL:
+            self.rot = 180
+            self.rot_center(self.rot)
+        if self.y == MOVE_VEL:
+            self.rot = 270
+            self.rot_center(self.rot)
+        if self.y == -MOVE_VEL:
+            self.rot = 90
+            self.rot_center(self.rot)
+
 
 # platform class - used in Map()
 class Platform(pygame.sprite.Sprite):
@@ -203,6 +228,7 @@ class Platform(pygame.sprite.Sprite):
 
     def update(self):
         pass
+
 
 # barrier class - used in Map()
 class Barrier(pygame.sprite.Sprite):
