@@ -18,7 +18,8 @@ class Player(pygame.sprite.Sprite):
         self.rot = 0
         self.PowerPac = False
 
-        # TODO: Clean this up by putting all image loads into a "sprite.py" file and importing at top
+        # TODO: Clean this up by putting all image loads into a "sprite.py" file and importing at top (optional)
+        # TODO: Just typical commenting and cleaning if anyone gets bored
         self.littlebite = pygame.image.load('Sprites/pacman_orig.png').convert_alpha()
         self.circle = pygame.image.load('Sprites/pacman_circle.png').convert_alpha()
         self.bigbite = pygame.image.load('Sprites/pacman_bigbite.png').convert_alpha()
@@ -36,9 +37,8 @@ class Player(pygame.sprite.Sprite):
         self.die11 = pygame.image.load('Sprites/die11.png').convert_alpha()
         self.onehundred = pygame.image.load('Sprites/oneHundred.png').convert_alpha()
 
-        self.blueTest = pygame.image.load('Sprites/POWER_GHOST_BLUE.png').convert_alpha()
-        self.blueTest = pygame.transform.scale(self.blueTest, (BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6, BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6))
-
+        self.powerBlue = pygame.image.load('Sprites/POWER_GHOST_BLUE.png').convert_alpha()
+        self.powerBlue = pygame.transform.scale(self.powerBlue, (BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6, BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6))
 
         self.imageOrig = self.transformpic(imgFile)
         self.image = self.transformpic(imgFile)
@@ -123,14 +123,16 @@ class Player(pygame.sprite.Sprite):
         pygame.time.delay(250)
 
     # TODO: When a power pellet is eaten, the ghost change blue correctly, but it pauses the whole game.
-    # TODO: fix so that the game continues while the "power mode" is engaged
+    # TODO: fix so that the game continues while the "power mode" is engaged (idea: maybe the powermode loop can start
+    # TODO: a timer and  set the flag True, then exit back to regular loop... from there maybe check for 8 seconds to pass
+    # TODO: before flipping flag back to false and changing ghosts back to normal
     # houses all of the things needed when pacman has eaten a power pellet
     def PowerModeFunction(self, ghost_list, sprites):
         self.PowerPac = True
         t_end = time.time() + 8
         while time.time() < t_end:
             for g in ghost_list:
-                g.image = self.blueTest
+                g.image = self.powerBlue
             Functions.screen.fill(BLACK)
             sprites.draw(Functions.screen)
             pygame.display.update()
