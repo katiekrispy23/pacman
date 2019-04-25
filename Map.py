@@ -75,6 +75,7 @@ def map():
                 sprites.add(ghost)
             if col == "R":
                 blinky = Blinky(x, y, "Sprites/RED_GHOST_LEFT.png")
+                print(x,y)
                 ghost_list.append(blinky)
                 sprites.add(blinky)
             if col == "Y":

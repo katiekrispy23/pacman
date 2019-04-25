@@ -16,6 +16,8 @@ class Player(pygame.sprite.Sprite):
         self.height = height
         self.x = 0
         self.y = 0
+        self.startx = x
+        self.starty = y
         self.rot = 0
         self.t_end = 0
         self.PowerPac = False
@@ -87,7 +89,7 @@ class Player(pygame.sprite.Sprite):
         if self.lives == 0:
             Functions.gameOver(sprites, self.score)
         else:
-            self.rect.centerx, self.rect.centery = 302, 478
+            self.rect.centerx, self.rect.centery = self.startx, self.starty
             self.x, self.y = 0, 0
         return lives
 
@@ -123,16 +125,6 @@ class Player(pygame.sprite.Sprite):
         Functions.screen.blit(self.onehundred, (self.rect.x, self.rect.y))
         pygame.display.update()
         pygame.time.delay(250)
-
-    # TODO: When a power pellet is eaten, the ghost change blue correctly, but it pauses the whole game.
-    # TODO: fix so that the game continues while the "power mode" is engaged (idea: maybe the powermode loop can start
-    # TODO: a timer and  set the flag True, then exit back to regular loop... from there maybe check for 8 seconds to pass
-    # TODO: before flipping flag back to false and changing ghosts back to normal
-    # houses all of the things needed when pacman has eaten a power pellet
-    def PowerModeFunction(self, ghost_list, sprites):
-        self.PowerPac = True
-        t_end = time.time() + 8
-        # while time.time() < t_end:
 
     # updates the location and speed based on keyboard inputs
     def update(self, up, down, left, right, platforms, counter, sprites, power_list, fruit_list, ghost_list, barriers):
@@ -194,7 +186,7 @@ class Player(pygame.sprite.Sprite):
 
                 if s != self.rect and self.rect.collidepoint(s.rect.center) and s in ghost_list and self.PowerPac == True:
                     self.score += 200
-                    sprites.remove(s)
+                    s.ghostReset()
 
                 # Collide with Power Pellet
                 if s != self.rect and self.rect.collidepoint(s.rect.center) and s in power_list:
@@ -319,16 +311,19 @@ class Blinky(pygame.sprite.Sprite):
         super().__init__()
         self.x = 0
         self.y = 0
+        self.startx = x
+        self.starty = y
         self.imageOrig = pygame.image.load(sprite).convert_alpha()
         self.imageOrig = pygame.transform.scale(self.imageOrig, (BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6, BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6))
         self.image = pygame.transform.scale(self.imageOrig, (BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6, BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6))
         self.rect = pygame.Rect(x + BLOCK_WIDTH // 4, y + BLOCK_WIDTH // 4, BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6, BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6)
 
+    def ghostReset(self):
+        self.rect.centerx, self.rect.centery = self.startx, self.starty
 
     def update(self,barriers):
         if self.x == 0 and self.y == 0:
             self.x = MOVE_VEL
-
 
         self.collide(self.x, 0, barriers)
         self.collide(0, self.y, barriers)
