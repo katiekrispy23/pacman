@@ -44,7 +44,7 @@ class Player(pygame.sprite.Sprite):
 
         self.powerBlue = pygame.image.load('Sprites/POWER_GHOST_BLUE.png').convert_alpha()
         self.powerBlue = pygame.transform.scale(self.powerBlue, (
-        BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6, BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6))
+            BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6, BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6))
 
         self.imageOrig = self.transformpic(imgFile)
         self.image = self.transformpic(imgFile)
@@ -305,21 +305,21 @@ class Fruit(pygame.sprite.Sprite):
                                 BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6)
 
 
+# class Ghost(pygame.sprite.Sprite):
+#     def __init__(self, x, y, sprite):
+#         super().__init__()
+#         self.x = 0
+#         self.y = 0
+#         self.imageOrig = pygame.image.load(sprite).convert_alpha()
+#         self.imageOrig = pygame.transform.scale(self.imageOrig, (
+#         BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6, BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6))
+#         self.image = pygame.transform.scale(self.imageOrig,
+#                                             (BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6, BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6))
+#         self.rect = pygame.Rect(x + BLOCK_WIDTH // 4, y + BLOCK_WIDTH // 4, BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6,
+#                                 BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6)
+
+
 class Ghost(pygame.sprite.Sprite):
-    def __init__(self, x, y, sprite):
-        super().__init__()
-        self.x = 0
-        self.y = 0
-        self.imageOrig = pygame.image.load(sprite).convert_alpha()
-        self.imageOrig = pygame.transform.scale(self.imageOrig, (
-        BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6, BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6))
-        self.image = pygame.transform.scale(self.imageOrig,
-                                            (BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6, BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6))
-        self.rect = pygame.Rect(x + BLOCK_WIDTH // 4, y + BLOCK_WIDTH // 4, BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6,
-                                BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6)
-
-
-class Blinky(pygame.sprite.Sprite):
     def __init__(self, x, y, sprite):
         super().__init__()
         self.x = 0
@@ -328,7 +328,7 @@ class Blinky(pygame.sprite.Sprite):
         self.starty = y
         self.imageOrig = pygame.image.load(sprite).convert_alpha()
         self.imageOrig = pygame.transform.scale(self.imageOrig, (
-        BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6, BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6))
+            BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6, BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6))
         self.image = pygame.transform.scale(self.imageOrig,
                                             (BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6, BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6))
         self.rect = pygame.Rect(x + BLOCK_WIDTH // 4, y + BLOCK_WIDTH // 4, BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6,
@@ -337,20 +337,19 @@ class Blinky(pygame.sprite.Sprite):
     def ghostReset(self):
         self.rect.centerx, self.rect.centery = self.startx, self.starty
 
-    def update(self,barriers,player):
+    def update(self, barriers, player):
         if self.x == 0 and self.y == 0:
             self.x = MOVE_VEL
 
-
-        self.collide(self.x, 0, barriers,player)
-        self.collide(0, self.y, barriers,player)
+        self.collide(self.x, 0, barriers, player)
+        self.collide(0, self.y, barriers, player)
         # increment in x direction
         self.rect.left += self.x
 
         # increment in y direction
         self.rect.top += self.y
 
-    def collide(self, x, y, barriers,player):
+    def collide(self, x, y, barriers, player):
         for p in barriers:
             if pygame.sprite.collide_rect(self, p):
                 if x > 0:
@@ -366,35 +365,35 @@ class Blinky(pygame.sprite.Sprite):
                 if y < 0:
                     self.rect.top = p.rect.bottom
                     self.y = 0
-                if x!=0 or y!=0:
-                    self.changeDirection(x,y,barriers,player)
+                if x != 0 or y != 0:
+                    self.changeDirection(x, y, barriers, player)
 
-    def changeDirection(self, x, y, barriers,player):
+    def changeDirection(self, x, y, barriers, player):
         open = ["L", "R", "U", "D"]
         for p in barriers:
-            if p.rect.collidepoint((self.rect.centerx,self.rect.top-6)):
+            if p.rect.collidepoint((self.rect.centerx, self.rect.top - 6)):
                 open.remove("U")
-            if p.rect.collidepoint((self.rect.centerx, self.rect.bottom+6)):
+            if p.rect.collidepoint((self.rect.centerx, self.rect.bottom + 6)):
                 open.remove("D")
-            if p.rect.collidepoint((self.rect.left-6, self.rect.centery)):
+            if p.rect.collidepoint((self.rect.left - 6, self.rect.centery)):
                 open.remove("L")
-            if p.rect.collidepoint((self.rect.right+6, self.rect.centerx)):
+            if p.rect.collidepoint((self.rect.right + 6, self.rect.centerx)):
                 open.remove("R")
-        dist = (WIN_WIDTH**2 + WIN_HEIGHT**2)
-        min=""
-        N = BLOCK_WIDTH- 2
-        M = BLOCK_HEIGHT -2
-        if ((self.rect.centerx + N - player.rect.centerx)**2 +(self.rect.centery- player.rect.centery)**2)<dist:
-            dist=((self.rect.centerx + N - player.rect.centerx)**2 +(self.rect.centery- player.rect.centery)**2)
+        dist = (WIN_WIDTH ** 2 + WIN_HEIGHT ** 2)
+        min = ""
+        N = BLOCK_WIDTH - 2
+        M = BLOCK_HEIGHT - 2
+        if ((self.rect.centerx + N - player.rect.centerx) ** 2 + (self.rect.centery - player.rect.centery) ** 2) < dist:
+            dist = ((self.rect.centerx + N - player.rect.centerx) ** 2 + (self.rect.centery - player.rect.centery) ** 2)
             min = "R"
-        if ((self.rect.centerx - N - player.rect.centerx)**2 +(self.rect.centery- player.rect.centery)**2)<dist:
-            dist=((self.rect.centerx - N - player.rect.centerx)**2 +(self.rect.centery- player.rect.centery)**2)
+        if ((self.rect.centerx - N - player.rect.centerx) ** 2 + (self.rect.centery - player.rect.centery) ** 2) < dist:
+            dist = ((self.rect.centerx - N - player.rect.centerx) ** 2 + (self.rect.centery - player.rect.centery) ** 2)
             min = "L"
-        if ((self.rect.centerx - player.rect.centerx)**2 +(self.rect.centery - M - player.rect.centery)**2)<dist:
-            dist=((self.rect.centerx - player.rect.centerx)**2 +(self.rect.centery - M - player.rect.centery)**2)
+        if ((self.rect.centerx - player.rect.centerx) ** 2 + (self.rect.centery - M - player.rect.centery) ** 2) < dist:
+            dist = ((self.rect.centerx - player.rect.centerx) ** 2 + (self.rect.centery - M - player.rect.centery) ** 2)
             min = "U"
-        if ((self.rect.centerx - player.rect.centerx)**2 +(self.rect.centery + M - player.rect.centery)**2)<dist:
-            dist=((self.rect.centerx - player.rect.centerx)**2 +(self.rect.centery + M - player.rect.centery)**2)
+        if ((self.rect.centerx - player.rect.centerx) ** 2 + (self.rect.centery + M - player.rect.centery) ** 2) < dist:
+            dist = ((self.rect.centerx - player.rect.centerx) ** 2 + (self.rect.centery + M - player.rect.centery) ** 2)
             min = "D"
 
         if min in open:
@@ -412,17 +411,17 @@ class Blinky(pygame.sprite.Sprite):
                 self.y = 0
                 self.x = -MOVE_VEL
             return
-        pick = random.randint(0,len(open)-1)
+        pick = random.randint(0, len(open) - 1)
         print(open[pick])
-        if open[pick]=="U":
+        if open[pick] == "U":
             self.y = -MOVE_VEL
             self.x = 0
-        if open[pick]=="D":
+        if open[pick] == "D":
             self.y = MOVE_VEL
             self.x = 0
-        if open[pick]=="R":
+        if open[pick] == "R":
             self.y = 0
             self.x = MOVE_VEL
-        if open[pick]=="L":
+        if open[pick] == "L":
             self.y = 0
             self.x = -MOVE_VEL

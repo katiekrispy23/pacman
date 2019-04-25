@@ -62,19 +62,19 @@ def map():
     for row in level:
         for col in row:
             if col == "B":
-                ghost = Ghost(x, y, "Sprites/BLUE_GHOST_UP.png")
-                ghost_list.append(ghost)
-                sprites.add(ghost)
+                inky = Ghost(x, y, "Sprites/BLUE_GHOST_UP.png")
+                ghost_list.append(inky)
+                sprites.add(inky)
             if col == "Q":
-                ghost = Ghost(x, y, "Sprites/PINK_GHOST_DOWN.png")
-                ghost_list.append(ghost)
-                sprites.add(ghost)
+                pinky = Ghost(x, y, "Sprites/PINK_GHOST_DOWN.png")
+                ghost_list.append(pinky)
+                sprites.add(pinky)
             if col == "O":
-                ghost = Ghost(x, y, "Sprites/ORANGE_GHOST_UP.png")
-                ghost_list.append(ghost)
-                sprites.add(ghost)
+                clyde = Ghost(x, y, "Sprites/ORANGE_GHOST_UP.png")
+                ghost_list.append(clyde)
+                sprites.add(clyde)
             if col == "R":
-                blinky = Blinky(x, y, "Sprites/RED_GHOST_LEFT.png")
+                blinky = Ghost(x, y, "Sprites/RED_GHOST_LEFT.png")
                 ghost_list.append(blinky)
                 sprites.add(blinky)
             if col == "Y":
@@ -168,7 +168,10 @@ def map():
             # update player, draw everything else
             counter = counter % 15
             player.update(up, down, left, right, platforms, counter, sprites, power_list, fruit_list, ghost_list, barriers)
-            blinky.update(barriers,player)
+            blinky.update(platforms,player)
+            # pinky.update(platforms,player)
+            # inky.update(platforms,player)
+            # clyde.update(platforms,player)
             sprites.draw(screen)
             Functions.HUD(player.lives, player.score)
             pygame.display.update()
@@ -181,7 +184,10 @@ def map():
             # update player, draw everything else
             counter = counter % 15
             player.update(up, down, left, right, platforms, counter, sprites, power_list, fruit_list, ghost_list, barriers)
-            blinky.update(barriers,player)
+            blinky.update(platforms,player)
+            # pinky.update(platforms,player)
+            # inky.update(platforms,player)
+            # clyde.update(platforms,player)
             sprites.draw(screen)
             Functions.HUD(player.lives, player.score)
             pygame.display.update()
