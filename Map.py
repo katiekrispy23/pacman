@@ -74,9 +74,9 @@ def map():
                 ghost_list.append(ghost)
                 sprites.add(ghost)
             if col == "R":
-                ghost = Ghost(x, y, "Sprites/RED_GHOST_LEFT.png")
-                ghost_list.append(ghost)
-                sprites.add(ghost)
+                blinky = Blinky(x, y, "Sprites/RED_GHOST_LEFT.png")
+                ghost_list.append(blinky)
+                sprites.add(blinky)
             if col == "Y":
                 power = Power(x, y)
                 power_list.append(power)
@@ -159,6 +159,7 @@ def map():
         # update player, draw everything else
         counter = counter % 15
         player.update(up, down, left, right, platforms, counter, sprites, power_list, fruit_list, ghost_list, barriers)
+        blinky.update(barriers)
         sprites.draw(screen)
         Functions.HUD(player.lives, player.score)
         pygame.display.update()

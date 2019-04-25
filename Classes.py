@@ -1,5 +1,6 @@
 import pygame
 import time
+import random
 # from pygame import *
 from PygameSettings import *
 import Functions
@@ -314,3 +315,74 @@ class Ghost(pygame.sprite.Sprite):
         self.imageOrig = pygame.transform.scale(self.imageOrig, (BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6, BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6))
         self.image = pygame.transform.scale(self.imageOrig, (BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6, BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6))
         self.rect = pygame.Rect(x + BLOCK_WIDTH // 4, y + BLOCK_WIDTH // 4, BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6, BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6)
+
+class Blinky(pygame.sprite.Sprite):
+    def __init__(self, x, y, sprite):
+        super().__init__()
+        self.x = 0
+        self.y = 0
+        self.imageOrig = pygame.image.load(sprite).convert_alpha()
+        self.imageOrig = pygame.transform.scale(self.imageOrig, (BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6, BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6))
+        self.image = pygame.transform.scale(self.imageOrig, (BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6, BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6))
+        self.rect = pygame.Rect(x + BLOCK_WIDTH // 4, y + BLOCK_WIDTH // 4, BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6, BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6)
+
+
+    def update(self,barriers):
+        if self.x == 0 and self.y == 0:
+            self.x = MOVE_VEL
+
+
+        self.collide(self.x, 0, barriers)
+        self.collide(0, self.y, barriers)
+        # increment in x direction
+        self.rect.left += self.x
+
+        # increment in y direction
+        self.rect.top += self.y
+
+    def collide(self, x, y, barriers):
+        for p in barriers:
+            if pygame.sprite.collide_rect(self, p):
+                if x > 0:
+                    self.rect.right = p.rect.left
+                    self.x = 0
+                    self.changeDirection(x,y,barriers)
+                if x < 0:
+                    self.rect.left = p.rect.right
+                    self.x = 0
+                    self.changeDirection(x,y,barriers)
+                if y > 0:
+                    self.rect.bottom = p.rect.top
+                    self.y = 0
+                    self.changeDirection(x,y,barriers)
+
+                if y < 0:
+                    self.rect.top = p.rect.bottom
+                    self.y = 0
+                    self.changeDirection(x,y,barriers)
+
+    def changeDirection(self, x, y, barriers):
+        open = ["L", "R", "U", "D"]
+        for p in barriers:
+            if p.rect.collidepoint((self.rect.centerx,self.rect.top-7)):
+                open.remove("U")
+            if p.rect.collidepoint((self.rect.centerx, self.rect.bottom + 7)):
+                open.remove("D")
+            if p.rect.collidepoint((self.rect.left - 7, self.rect.centery)):
+                open.remove("L")
+            if p.rect.collidepoint((self.rect.right + 7, self.rect.centerx)):
+                open.remove("R")
+        pick = random.randint(0,len(open)-1)
+        print(open[pick])
+        if open[pick]=="U":
+            self.y = -MOVE_VEL
+            self.x = 0
+        if open[pick]=="D":
+            self.y = MOVE_VEL
+            self.x = 0
+        if open[pick]=="R":
+            self.y = 0
+            self.x = MOVE_VEL
+        if open[pick]=="L":
+            self.y = 0
+            self.x = -MOVE_VEL
