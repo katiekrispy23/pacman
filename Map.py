@@ -159,7 +159,7 @@ def map():
         # update player, draw everything else
         counter = counter % 15
         player.update(up, down, left, right, platforms, counter, sprites, power_list, fruit_list, ghost_list, barriers)
-        blinky.update(barriers)
+        blinky.update(barriers,player)
         sprites.draw(screen)
         Functions.HUD(player.lives, player.score)
         pygame.display.update()
