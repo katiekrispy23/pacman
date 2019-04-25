@@ -17,6 +17,7 @@ class Player(pygame.sprite.Sprite):
         self.x = 0
         self.y = 0
         self.rot = 0
+        self.t_end = 0
         self.PowerPac = False
 
         # TODO: Clean this up by putting all image loads into a "sprite.py" file and importing at top (optional)
@@ -131,15 +132,7 @@ class Player(pygame.sprite.Sprite):
     def PowerModeFunction(self, ghost_list, sprites):
         self.PowerPac = True
         t_end = time.time() + 8
-        while time.time() < t_end:
-            for g in ghost_list:
-                g.image = self.powerBlue
-            Functions.screen.fill(BLACK)
-            sprites.draw(Functions.screen)
-            pygame.display.update()
-        for g in ghost_list:
-            g.image = g.imageOrig
-        self.PowerPac = False
+        # while time.time() < t_end:
 
     # updates the location and speed based on keyboard inputs
     def update(self, up, down, left, right, platforms, counter, sprites, power_list, fruit_list, ghost_list, barriers):
@@ -194,17 +187,22 @@ class Player(pygame.sprite.Sprite):
             if s not in platforms:
 
                 # Collide with Ghost
-                if s != self.rect and self.rect.collidepoint(s.rect.center) and s in ghost_list:
+                if s != self.rect and self.rect.collidepoint(s.rect.center) and s in ghost_list and self.PowerPac == False:
                     pygame.mixer.Sound.play(dieSound)
                     self.dieAnimation(sprites)
                     self.reset(self.lives, sprites)
+
+                if s != self.rect and self.rect.collidepoint(s.rect.center) and s in ghost_list and self.PowerPac == True:
+                    self.score += 200
+                    sprites.remove(s)
 
                 # Collide with Power Pellet
                 if s != self.rect and self.rect.collidepoint(s.rect.center) and s in power_list:
                     self.score += 50
                     sprites.remove(s)
                     power_list.remove(s)
-                    self.PowerModeFunction(ghost_list, sprites)
+                    self.PowerPac = True
+                    self.t_end = time.time() + 8
 
                 # collide with fruit
                 elif s != self.rect and self.rect.collidepoint(s.rect.center) and s in fruit_list:
@@ -373,7 +371,6 @@ class Blinky(pygame.sprite.Sprite):
             if p.rect.collidepoint((self.rect.right + 7, self.rect.centerx)):
                 open.remove("R")
         pick = random.randint(0,len(open)-1)
-        print(open[pick])
         if open[pick]=="U":
             self.y = -MOVE_VEL
             self.x = 0

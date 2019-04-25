@@ -152,14 +152,36 @@ def map():
             if e.type == KEYUP and e.key == K_LEFT:
                 left = False
 
-        # draw background. This is a repeated background
-        for x in range(0,int(total_level_width)):
-            screen.blit(myImage, (x*repeatedImageWidth, 0))
+        if player.PowerPac == True:
 
-        # update player, draw everything else
-        counter = counter % 15
-        player.update(up, down, left, right, platforms, counter, sprites, power_list, fruit_list, ghost_list, barriers)
-        blinky.update(barriers)
-        sprites.draw(screen)
-        Functions.HUD(player.lives, player.score)
-        pygame.display.update()
+            for g in ghost_list:  # make the ghosts blue
+                g.image = player.powerBlue
+
+            if player.t_end < time.time():  # if 8 seconds have passed, flip the flag
+                for g in ghost_list:
+                    g.image = g.imageOrig
+                player.PowerPac = False
+
+            # draw background. This is a repeated background
+            for x in range(0, int(total_level_width)):
+                screen.blit(myImage, (x*repeatedImageWidth, 0))
+            # update player, draw everything else
+            counter = counter % 15
+            player.update(up, down, left, right, platforms, counter, sprites, power_list, fruit_list, ghost_list, barriers)
+            blinky.update(barriers)
+            sprites.draw(screen)
+            Functions.HUD(player.lives, player.score)
+            pygame.display.update()
+
+
+        else:
+            # draw background. This is a repeated background
+            for x in range(0, int(total_level_width)):
+                screen.blit(myImage, (x * repeatedImageWidth, 0))
+            # update player, draw everything else
+            counter = counter % 15
+            player.update(up, down, left, right, platforms, counter, sprites, power_list, fruit_list, ghost_list, barriers)
+            blinky.update(barriers)
+            sprites.draw(screen)
+            Functions.HUD(player.lives, player.score)
+            pygame.display.update()
