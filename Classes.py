@@ -327,81 +327,51 @@ class Blinky(pygame.sprite.Sprite):
         self.rect = pygame.Rect(x + BLOCK_WIDTH // 4, y + BLOCK_WIDTH // 4, BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6, BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6)
 
 
-    def update(self,barriers,player):
+    def update(self,barriers):
         if self.x == 0 and self.y == 0:
             self.x = MOVE_VEL
 
 
-        self.collide(self.x, 0, barriers,player)
-        self.collide(0, self.y, barriers,player)
+        self.collide(self.x, 0, barriers)
+        self.collide(0, self.y, barriers)
         # increment in x direction
         self.rect.left += self.x
 
         # increment in y direction
         self.rect.top += self.y
 
-    def collide(self, x, y, barriers,player):
+    def collide(self, x, y, barriers):
         for p in barriers:
             if pygame.sprite.collide_rect(self, p):
                 if x > 0:
                     self.rect.right = p.rect.left
                     self.x = 0
+                    self.changeDirection(x,y,barriers)
                 if x < 0:
                     self.rect.left = p.rect.right
                     self.x = 0
+                    self.changeDirection(x,y,barriers)
                 if y > 0:
                     self.rect.bottom = p.rect.top
                     self.y = 0
+                    self.changeDirection(x,y,barriers)
 
                 if y < 0:
                     self.rect.top = p.rect.bottom
                     self.y = 0
-                if x!=0 or y!=0:
-                    self.changeDirection(x,y,barriers,player)
+                    self.changeDirection(x,y,barriers)
 
-    def changeDirection(self, x, y, barriers,player):
+    def changeDirection(self, x, y, barriers):
         open = ["L", "R", "U", "D"]
         for p in barriers:
-            if p.rect.collidepoint((self.rect.centerx,self.rect.top-6)):
+            if p.rect.collidepoint((self.rect.centerx,self.rect.top-7)):
                 open.remove("U")
-            if p.rect.collidepoint((self.rect.centerx, self.rect.bottom+6)):
+            if p.rect.collidepoint((self.rect.centerx, self.rect.bottom + 7)):
                 open.remove("D")
-            if p.rect.collidepoint((self.rect.left-6, self.rect.centery)):
+            if p.rect.collidepoint((self.rect.left - 7, self.rect.centery)):
                 open.remove("L")
-            if p.rect.collidepoint((self.rect.right+6, self.rect.centerx)):
+            if p.rect.collidepoint((self.rect.right + 7, self.rect.centerx)):
                 open.remove("R")
-        dist = (WIN_WIDTH**2 + WIN_HEIGHT**2)
-        min=""
-        N = BLOCK_WIDTH- 2
-        M = BLOCK_HEIGHT -2
-        if ((self.rect.centerx + N - player.rect.centerx)**2 +(self.rect.centery- player.rect.centery)**2)<dist:
-            dist=((self.rect.centerx + N - player.rect.centerx)**2 +(self.rect.centery- player.rect.centery)**2)
-            min = "R"
-        if ((self.rect.centerx - N - player.rect.centerx)**2 +(self.rect.centery- player.rect.centery)**2)<dist:
-            dist=((self.rect.centerx - N - player.rect.centerx)**2 +(self.rect.centery- player.rect.centery)**2)
-            min = "L"
-        if ((self.rect.centerx - player.rect.centerx)**2 +(self.rect.centery - M - player.rect.centery)**2)<dist:
-            dist=((self.rect.centerx - player.rect.centerx)**2 +(self.rect.centery - M - player.rect.centery)**2)
-            min = "U"
-        if ((self.rect.centerx - player.rect.centerx)**2 +(self.rect.centery + M - player.rect.centery)**2)<dist:
-            dist=((self.rect.centerx - player.rect.centerx)**2 +(self.rect.centery + M - player.rect.centery)**2)
-            min = "D"
-
-        if min in open:
-            print(open)
-            if min == "U":
-                self.y = -MOVE_VEL
-                self.x = 0
-            if min == "D":
-                self.y = MOVE_VEL
-                self.x = 0
-            if min == "R":
-                self.y = 0
-                self.x = MOVE_VEL
-            if min == "L":
-                self.y = 0
-                self.x = -MOVE_VEL
-            return
         pick = random.randint(0,len(open)-1)
         print(open[pick])
         if open[pick]=="U":
