@@ -45,6 +45,10 @@ class Player(pygame.sprite.Sprite):
         self.powerBlue = pygame.image.load('Sprites/POWER_GHOST_BLUE.png').convert_alpha()
         self.powerBlue = pygame.transform.scale(self.powerBlue, (
             BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6, BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6))
+        self.powerWhite = pygame.image.load('Sprites/POWER_GHOST_WHITE.png').convert_alpha()
+        self.powerWhite = pygame.transform.scale(self.powerWhite, (
+            BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6, BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6))
+
 
         self.imageOrig = self.transformpic(imgFile)
         self.image = self.transformpic(imgFile)
