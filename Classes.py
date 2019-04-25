@@ -76,7 +76,6 @@ class Player(pygame.sprite.Sprite):
 
     # makes chewing animation when pacman is in motion
     def chompchomp(self, counter):
-
         if counter == 0:
             self.imageOrig = self.pacman_big
         if counter == 5:
@@ -91,7 +90,7 @@ class Player(pygame.sprite.Sprite):
         if self.lives == 0:
             Functions.gameOver(sprites, self.score)
         else:
-            self.rect.centerx, self.rect.centery = self.startx, self.starty
+            self.rect.centerx, self.rect.centery = 302, 478
             self.x, self.y = 0, 0
         return lives
 
@@ -227,6 +226,7 @@ class Player(pygame.sprite.Sprite):
                     self.rect.top = p.rect.bottom
                     self.y = 0
 
+    # used to help the rotation of pacman based on his direction of movement
     def direction(self):
         # if pacman is moving right
         if self.x == MOVE_VEL and self.y == 0:
@@ -305,20 +305,6 @@ class Fruit(pygame.sprite.Sprite):
                                 BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6)
 
 
-# class Ghost(pygame.sprite.Sprite):
-#     def __init__(self, x, y, sprite):
-#         super().__init__()
-#         self.x = 0
-#         self.y = 0
-#         self.imageOrig = pygame.image.load(sprite).convert_alpha()
-#         self.imageOrig = pygame.transform.scale(self.imageOrig, (
-#         BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6, BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6))
-#         self.image = pygame.transform.scale(self.imageOrig,
-#                                             (BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6, BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6))
-#         self.rect = pygame.Rect(x + BLOCK_WIDTH // 4, y + BLOCK_WIDTH // 4, BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6,
-#                                 BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6)
-
-
 class Ghost(pygame.sprite.Sprite):
     def __init__(self, x, y, sprite):
         super().__init__()
@@ -328,16 +314,105 @@ class Ghost(pygame.sprite.Sprite):
         self.starty = y
         self.imageOrig = pygame.image.load(sprite).convert_alpha()
         self.imageOrig = pygame.transform.scale(self.imageOrig, (
-            BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6, BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6))
+        BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6, BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6))
         self.image = pygame.transform.scale(self.imageOrig,
                                             (BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6, BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6))
+
+        self.inkyup1 = pygame.image.load('Sprites/BLUE_GHOST_UP1.png').convert_alpha()
+        self.inkyup2 = pygame.image.load('Sprites/BLUE_GHOST_UP2.png').convert_alpha()
+        self.inkydown1 = pygame.image.load('Sprites/BLUE_GHOST_DOWN1.png').convert_alpha()
+        self.inkydown2 = pygame.image.load('Sprites/BLUE_GHOST_DOWN2.png').convert_alpha()
+        self.inkyleft1 = pygame.image.load('Sprites/BLUE_GHOST_LEFT1.png').convert_alpha()
+        self.inkyleft2 = pygame.image.load('Sprites/BLUE_GHOST_LEFT2.png').convert_alpha()
+        self.inkyright1 = pygame.image.load('Sprites/BLUE_GHOST_RIGHT1.png').convert_alpha()
+        self.inkyright2 = pygame.image.load('Sprites/BLUE_GHOST_RIGHT2.png').convert_alpha()
+        self.inkyup1 = self.transformpic(self.inkyup1)
+        self.inkyup2 = self.transformpic(self.inkyup2)
+        self.inkydown1 = self.transformpic(self.inkydown1)
+        self.inkydown2 = self.transformpic(self.inkydown2)
+        self.inkyleft1 = self.transformpic(self.inkyleft1)
+        self.inkyleft2 = self.transformpic(self.inkyleft2)
+        self.inkyright1 = self.transformpic(self.inkyright1)
+        self.inkyright2 = self.transformpic(self.inkyright2)
+
         self.rect = pygame.Rect(x + BLOCK_WIDTH // 4, y + BLOCK_WIDTH // 4, BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6,
                                 BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6)
+
+    def transformpic(self, image):
+        image = pygame.transform.scale(image,
+                                       (BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6, BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6))
+        return image
+
+    def wiggle(self, counter, image1, image2):
+        if counter == 0:
+            self.image = image1
+        if counter == 7:
+            self.image = image2
 
     def ghostReset(self):
         self.rect.centerx, self.rect.centery = self.startx, self.starty
 
-    def update(self, barriers, player):
+    def updateblinky(self, barriers, player, counter):
+        if self.x == 0 and self.y == 0:
+            self.x = MOVE_VEL
+
+        self.collide(self.x, 0, barriers, player)
+        self.collide(0, self.y, barriers, player)
+        # increment in x direction
+        self.rect.left += self.x
+
+        # increment in y direction
+        self.rect.top += self.y
+
+        if self.x == MOVE_VEL and self.y == 0:
+            self.wiggle(counter, self.inkyright1, self.inkyright2)
+
+        if self.x == -MOVE_VEL and self.y == 0:
+            self.wiggle(counter, self.inkyleft1, self.inkyleft2)
+
+        if self.x == 0 and self.y == MOVE_VEL:
+            self.wiggle(counter, self.inkydown1, self.inkydown2)
+
+        if self.x == 0 and self.y == -MOVE_VEL:
+            self.wiggle(counter, self.inkyup1, self.inkyup2)
+
+    def updateclyde(self, barriers, player, counter):
+        if self.x == 0 and self.y == 0:
+            self.x = MOVE_VEL
+
+        self.collide(self.x, 0, barriers, player)
+        self.collide(0, self.y, barriers, player)
+        # increment in x direction
+        self.rect.left += self.x
+
+        # increment in y direction
+        self.rect.top += self.y
+
+    def updateinky(self, barriers, player, counter):
+        if self.x == 0 and self.y == 0:
+            self.x = MOVE_VEL
+
+        self.collide(self.x, 0, barriers, player)
+        self.collide(0, self.y, barriers, player)
+        # increment in x direction
+        self.rect.left += self.x
+
+        # increment in y direction
+        self.rect.top += self.y
+
+        if self.x == MOVE_VEL and self.y == 0:
+            self.wiggle(counter, self.inkyright1, self.inkyright2)
+
+        if self.x == -MOVE_VEL and self.y == 0:
+            self.wiggle(counter, self.inkyleft1, self.inkyleft2)
+
+        if self.x == 0 and self.y == MOVE_VEL:
+            self.wiggle(counter, self.inkydown1, self.inkydown2)
+
+        if self.x == 0 and self.y == -MOVE_VEL:
+            self.wiggle(counter, self.inkyup1, self.inkyup2)
+
+    def updatepinky(self, barriers, player, counter):
         if self.x == 0 and self.y == 0:
             self.x = MOVE_VEL
 

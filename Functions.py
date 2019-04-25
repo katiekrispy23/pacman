@@ -8,10 +8,12 @@ v = WIN_HEIGHT
 screen = pygame.display.set_mode((WIN_WIDTH, WIN_HEIGHT), FLAGS, DEPTH)
 timer = pygame.time.Clock()
 
+
 # used for in game text
 def text_objects(text, font, color):
     textSurface = font.render(text, True, color)
     return textSurface, textSurface.get_rect()
+
 
 # intro function
 def intro():
@@ -40,8 +42,8 @@ def intro():
         # text size for intro screen
 
         # blits image to screen
-        screen.blit(img, (0,0))
-        #add other text to screen
+        screen.blit(img, (0, 0))
+        # add other text to screen
         TextSurf, introRect = text_objects("Use the arrow keys to control Pacman", smallText, WHITE)
         introRect.center = (h // 2, v - v // 8)
         screen.blit(TextSurf, introRect)
@@ -54,17 +56,17 @@ def intro():
         introRect.center = (h // 2, v - v // 32)
         screen.blit(TextSurf, introRect)
         pygame.display.update()
-        
-        
+
+
 def HUD(lives, score):
     # draw "lives" on bottom left of screen
-    lifeImg =  pygame.image.load('Sprites/life.png')
+    lifeImg = pygame.image.load('Sprites/life.png')
     lifeImg = pygame.transform.scale(lifeImg, (h // 24, h // 24))
 
     if lives == 3:
         screen.blit(lifeImg, (h // 18, v - v // 18))
-        screen.blit(lifeImg, (2*h // 18, v - v // 18))
-        screen.blit(lifeImg, (3*h // 18, v - v // 18))
+        screen.blit(lifeImg, (2 * h // 18, v - v // 18))
+        screen.blit(lifeImg, (3 * h // 18, v - v // 18))
     if lives == 2:
         screen.blit(lifeImg, (h // 18, v - v // 18))
         screen.blit(lifeImg, (2 * h // 18, v - v // 18))

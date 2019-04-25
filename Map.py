@@ -11,10 +11,9 @@ BACKGROUND_IMAGE = 'Sprites/bg.png'
 
 
 def map():
-
     global WIN_HEIGHT, WIN_WIDTH
     pygame.init()
-    screen = pygame.display.set_mode((WIN_WIDTH,WIN_HEIGHT), FLAGS, DEPTH)
+    screen = pygame.display.set_mode((WIN_WIDTH, WIN_HEIGHT), FLAGS, DEPTH)
     timer = pygame.time.Clock()
 
     up = False
@@ -34,35 +33,35 @@ def map():
     # The drawing of the level. P means "platform", M stands for "me" (or "MARIO")
     #  You can add different things here
     level = [
-            "PPPPPPPPPPPPPPPPPPP",
-            "PCCCCCCCCPCCCCCCCCP",
-            "PCPPCPPPCPCPPPCPPCP",
-            "PYPPCPPPCPCPPPCPPYP",
-            "PCCCCCCCCCCCCCCCCCP",
-            "PCPPCPCPPPPPCPCPPCP",
-            "PCCCCPCCCPCCCPCCCCP",
-            "PPPPCPPPCPCPPPCPPPP",
-            "PPPPCP R     PCPPPP",
-            "PPPPCP PPDPP PCPPPP",
-            "    C  PBQOP  C    ",
-            "PPPPCP PPPPP PCPPPP",
-            "PPPPCP   F   PCPPPP",
-            "PPPPCPCPPPPPCPCPPPP",
-            "PCCCCCCCCPCCCCCCCCP",
-            "PCPPCPPPCPCPPPCPPCP",
-            "PYCPCCCCCMCCCCCPCYP",
-            "PPCPCPCPPPPPCPCPCPP",
-            "PCCCCPCCCPCCCPCCCCP",
-            "PCPPPPPPCPCPPPPPPCP",
-            "PCCCCCCCCCCCCCCCCCP",
-            "PPPPPPPPPPPPPPPPPPP",
-            "PPPPPPPPPPPPPPPPPPP",]
+        "PPPPPPPPPPPPPPPPPPP",
+        "PCCCCCCCCPCCCCCCCCP",
+        "PCPPCPPPCPCPPPCPPCP",
+        "PYPPCPPPCPCPPPCPPYP",
+        "PCCCCCCCCCCCCCCCCCP",
+        "PCPPCPCPPPPPCPCPPCP",
+        "PCCCCPCCCPCCCPCCCCP",
+        "PPPPCPPPCPCPPPCPPPP",
+        "PPPPCP R     PCPPPP",
+        "PPPPCP PPDPP PCPPPP",
+        "    C  PBQOP  C    ",
+        "PPPPCP PPPPP PCPPPP",
+        "PPPPCP   F   PCPPPP",
+        "PPPPCPCPPPPPCPCPPPP",
+        "PCCCCCCCCPCCCCCCCCP",
+        "PCPPCPPPCPCPPPCPPCP",
+        "PYCPCCCCCMCCCCCPCYP",
+        "PPCPCPCPPPPPCPCPCPP",
+        "PCCCCPCCCPCCCPCCCCP",
+        "PCPPPPPPCPCPPPPPPCP",
+        "PCCCCCCCCCCCCCCCCCP",
+        "PPPPPPPPPPPPPPPPPPP",
+        "PPPPPPPPPPPPPPPPPPP", ]
     # build the level
     playerFlag = True
     for row in level:
         for col in row:
             if col == "B":
-                inky = Ghost(x, y, "Sprites/BLUE_GHOST_UP.png")
+                inky = Ghost(x, y, "Sprites/BLUE_GHOST_UP1.png")
                 ghost_list.append(inky)
                 sprites.add(inky)
             if col == "Q":
@@ -164,14 +163,15 @@ def map():
 
             # draw background. This is a repeated background
             for x in range(0, int(total_level_width)):
-                screen.blit(myImage, (x*repeatedImageWidth, 0))
+                screen.blit(myImage, (x * repeatedImageWidth, 0))
             # update player, draw everything else
             counter = counter % 15
-            player.update(up, down, left, right, platforms, counter, sprites, power_list, fruit_list, ghost_list, barriers)
-            blinky.update(platforms,player)
-            # pinky.update(platforms,player)
-            # inky.update(platforms,player)
-            # clyde.update(platforms,player)
+            player.update(up, down, left, right, platforms, counter, sprites, power_list, fruit_list, ghost_list,
+                          barriers)
+            blinky.updateblinky(platforms, player, counter)
+            # pinky.updatepinky(platforms,player, counter)
+            # inky.updateinky(platforms,player, counter)
+            # clyde.updateclyde(platforms,player, counter)
             sprites.draw(screen)
             Functions.HUD(player.lives, player.score)
             pygame.display.update()
@@ -183,11 +183,12 @@ def map():
                 screen.blit(myImage, (x * repeatedImageWidth, 0))
             # update player, draw everything else
             counter = counter % 15
-            player.update(up, down, left, right, platforms, counter, sprites, power_list, fruit_list, ghost_list, barriers)
-            blinky.update(platforms,player)
-            # pinky.update(platforms,player)
-            # inky.update(platforms,player)
-            # clyde.update(platforms,player)
+            player.update(up, down, left, right, platforms, counter, sprites, power_list, fruit_list, ghost_list,
+                          barriers)
+            blinky.updateblinky(platforms, player, counter)
+            # pinky.updatepinky(platforms,player, counter)
+            # inky.updateinky(platforms,player, counter)
+            # clyde.updateclyde(platforms,player, counter)
             sprites.draw(screen)
             Functions.HUD(player.lives, player.score)
             pygame.display.update()
