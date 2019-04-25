@@ -6,6 +6,7 @@ from PygameSettings import *
 import Functions
 import Sprites
 
+
 # Player class. Change this to include an image
 class Player(pygame.sprite.Sprite):
     def __init__(self, imgFile, x, y, width, height, lives, score):
@@ -16,7 +17,10 @@ class Player(pygame.sprite.Sprite):
         self.height = height
         self.x = 0
         self.y = 0
+        self.startx = x
+        self.starty = y
         self.rot = 0
+        self.t_end = 0
         self.PowerPac = False
 
         # TODO: Clean this up by putting all image loads into a "sprite.py" file and importing at top (optional)
@@ -39,7 +43,8 @@ class Player(pygame.sprite.Sprite):
         self.onehundred = pygame.image.load('Sprites/oneHundred.png').convert_alpha()
 
         self.powerBlue = pygame.image.load('Sprites/POWER_GHOST_BLUE.png').convert_alpha()
-        self.powerBlue = pygame.transform.scale(self.powerBlue, (BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6, BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6))
+        self.powerBlue = pygame.transform.scale(self.powerBlue, (
+        BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6, BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6))
 
         self.imageOrig = self.transformpic(imgFile)
         self.image = self.transformpic(imgFile)
@@ -86,7 +91,7 @@ class Player(pygame.sprite.Sprite):
         if self.lives == 0:
             Functions.gameOver(sprites, self.score)
         else:
-            self.rect.centerx, self.rect.centery = 302, 478
+            self.rect.centerx, self.rect.centery = self.startx, self.starty
             self.x, self.y = 0, 0
         return lives
 
@@ -105,7 +110,8 @@ class Player(pygame.sprite.Sprite):
     # in charge of the animation when pacman hits a ghost and he "pops"
     def dieAnimation(self, sprites):
         self.image = self.die0
-        for img in [self.die1, self.die2, self.die3, self.die4, self.die5, self.die6, self.die7, self.die8, self.die9, self.die10, self.die11]:
+        for img in [self.die1, self.die2, self.die3, self.die4, self.die5, self.die6, self.die7, self.die8, self.die9,
+                    self.die10, self.die11]:
             Functions.screen.fill(BLACK)
             sprites.draw(Functions.screen)
             Functions.screen.blit(img, (self.rect.x, self.rect.y))
@@ -122,24 +128,6 @@ class Player(pygame.sprite.Sprite):
         Functions.screen.blit(self.onehundred, (self.rect.x, self.rect.y))
         pygame.display.update()
         pygame.time.delay(250)
-
-    # TODO: When a power pellet is eaten, the ghost change blue correctly, but it pauses the whole game.
-    # TODO: fix so that the game continues while the "power mode" is engaged (idea: maybe the powermode loop can start
-    # TODO: a timer and  set the flag True, then exit back to regular loop... from there maybe check for 8 seconds to pass
-    # TODO: before flipping flag back to false and changing ghosts back to normal
-    # houses all of the things needed when pacman has eaten a power pellet
-    def PowerModeFunction(self, ghost_list, sprites):
-        self.PowerPac = True
-        t_end = time.time() + 8
-        while time.time() < t_end:
-            for g in ghost_list:
-                g.image = self.powerBlue
-            Functions.screen.fill(BLACK)
-            sprites.draw(Functions.screen)
-            pygame.display.update()
-        for g in ghost_list:
-            g.image = g.imageOrig
-        self.PowerPac = False
 
     # updates the location and speed based on keyboard inputs
     def update(self, up, down, left, right, platforms, counter, sprites, power_list, fruit_list, ghost_list, barriers):
@@ -169,7 +157,7 @@ class Player(pygame.sprite.Sprite):
 
         # increment in x direction
         self.rect.left += self.x
-        
+
         # do x-axis collisions
         self.collide(self.x, 0, platforms, sprites, power_list, fruit_list, ghost_list, barriers)
 
@@ -194,17 +182,24 @@ class Player(pygame.sprite.Sprite):
             if s not in platforms:
 
                 # Collide with Ghost
-                if s != self.rect and self.rect.collidepoint(s.rect.center) and s in ghost_list:
+                if s != self.rect and self.rect.collidepoint(
+                        s.rect.center) and s in ghost_list and self.PowerPac == False:
                     pygame.mixer.Sound.play(dieSound)
                     self.dieAnimation(sprites)
                     self.reset(self.lives, sprites)
+
+                if s != self.rect and self.rect.collidepoint(
+                        s.rect.center) and s in ghost_list and self.PowerPac == True:
+                    self.score += 200
+                    s.ghostReset()
 
                 # Collide with Power Pellet
                 if s != self.rect and self.rect.collidepoint(s.rect.center) and s in power_list:
                     self.score += 50
                     sprites.remove(s)
                     power_list.remove(s)
-                    self.PowerModeFunction(ghost_list, sprites)
+                    self.PowerPac = True
+                    self.t_end = time.time() + 7.5
 
                 # collide with fruit
                 elif s != self.rect and self.rect.collidepoint(s.rect.center) and s in fruit_list:
@@ -292,8 +287,10 @@ class Power(pygame.sprite.Sprite):
         self.x = 0
         self.y = 0
         self.imageOrig = pygame.image.load('Sprites/power_pellet.png').convert_alpha()
-        self.image = pygame.transform.scale(self.imageOrig, (BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6, BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6))
-        self.rect = pygame.Rect(x + BLOCK_WIDTH // 6, y + BLOCK_WIDTH // 8, BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6, BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6)
+        self.image = pygame.transform.scale(self.imageOrig,
+                                            (BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6, BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6))
+        self.rect = pygame.Rect(x + BLOCK_WIDTH // 6, y + BLOCK_WIDTH // 8, BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6,
+                                BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6)
 
 
 class Fruit(pygame.sprite.Sprite):
@@ -302,8 +299,10 @@ class Fruit(pygame.sprite.Sprite):
         self.x = 0
         self.y = 0
         self.imageOrig = pygame.image.load('Items/ITEM_CHERRY.png').convert_alpha()
-        self.image = pygame.transform.scale(self.imageOrig, (BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6, BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6))
-        self.rect = pygame.Rect(x + BLOCK_WIDTH // 4, y + BLOCK_WIDTH // 4, BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6, BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6)
+        self.image = pygame.transform.scale(self.imageOrig,
+                                            (BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6, BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6))
+        self.rect = pygame.Rect(x + BLOCK_WIDTH // 4, y + BLOCK_WIDTH // 4, BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6,
+                                BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6)
 
 
 class Ghost(pygame.sprite.Sprite):
@@ -312,20 +311,31 @@ class Ghost(pygame.sprite.Sprite):
         self.x = 0
         self.y = 0
         self.imageOrig = pygame.image.load(sprite).convert_alpha()
-        self.imageOrig = pygame.transform.scale(self.imageOrig, (BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6, BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6))
-        self.image = pygame.transform.scale(self.imageOrig, (BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6, BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6))
-        self.rect = pygame.Rect(x + BLOCK_WIDTH // 4, y + BLOCK_WIDTH // 4, BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6, BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6)
+        self.imageOrig = pygame.transform.scale(self.imageOrig, (
+        BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6, BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6))
+        self.image = pygame.transform.scale(self.imageOrig,
+                                            (BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6, BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6))
+        self.rect = pygame.Rect(x + BLOCK_WIDTH // 4, y + BLOCK_WIDTH // 4, BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6,
+                                BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6)
+
 
 class Blinky(pygame.sprite.Sprite):
     def __init__(self, x, y, sprite):
         super().__init__()
         self.x = 0
         self.y = 0
+        self.startx = x
+        self.starty = y
         self.imageOrig = pygame.image.load(sprite).convert_alpha()
-        self.imageOrig = pygame.transform.scale(self.imageOrig, (BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6, BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6))
-        self.image = pygame.transform.scale(self.imageOrig, (BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6, BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6))
-        self.rect = pygame.Rect(x + BLOCK_WIDTH // 4, y + BLOCK_WIDTH // 4, BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6, BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6)
+        self.imageOrig = pygame.transform.scale(self.imageOrig, (
+        BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6, BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6))
+        self.image = pygame.transform.scale(self.imageOrig,
+                                            (BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6, BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6))
+        self.rect = pygame.Rect(x + BLOCK_WIDTH // 4, y + BLOCK_WIDTH // 4, BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6,
+                                BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6)
 
+    def ghostReset(self):
+        self.rect.centerx, self.rect.centery = self.startx, self.starty
 
     def update(self,barriers,player):
         if self.x == 0 and self.y == 0:
