@@ -65,15 +65,15 @@ def map():
                 ghost_list.append(inky)
                 sprites.add(inky)
             if col == "Q":
-                pinky = Ghost(x, y, "Sprites/PINK_GHOST_DOWN.png")
+                pinky = Ghost(x, y, "Sprites/PINK_GHOST_DOWN1.png")
                 ghost_list.append(pinky)
                 sprites.add(pinky)
             if col == "O":
-                clyde = Ghost(x, y, "Sprites/ORANGE_GHOST_UP.png")
+                clyde = Ghost(x, y, "Sprites/ORANGE_GHOST_UP1.png")
                 ghost_list.append(clyde)
                 sprites.add(clyde)
             if col == "R":
-                blinky = Ghost(x, y, "Sprites/RED_GHOST_LEFT.png")
+                blinky = Ghost(x, y, "Sprites/RED_GHOST_LEFT1.png")
                 ghost_list.append(blinky)
                 sprites.add(blinky)
             if col == "Y":
@@ -154,7 +154,7 @@ def map():
         if player.PowerPac == True:
 
             for g in ghost_list:  # make the ghosts blue
-                g.image = player.powerBlue
+                g.image = player.powerBlue1
 
             if player.t_end < time.time():  # if 8 seconds have passed, flip the flag
                 for g in ghost_list:

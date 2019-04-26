@@ -42,11 +42,14 @@ class Player(pygame.sprite.Sprite):
         self.die11 = pygame.image.load('Sprites/die11.png').convert_alpha()
         self.onehundred = pygame.image.load('Sprites/oneHundred.png').convert_alpha()
 
-        self.powerBlue = pygame.image.load('Sprites/POWER_GHOST_BLUE.png').convert_alpha()
-        self.powerBlue = pygame.transform.scale(self.powerBlue, (
+        self.powerBlue1 = pygame.image.load('Sprites/POWER_GHOST_BLUE1.png').convert_alpha()
+        self.powerBlue1 = pygame.transform.scale(self.powerBlue1, (
             BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6, BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6))
-        self.powerWhite = pygame.image.load('Sprites/POWER_GHOST_WHITE.png').convert_alpha()
-        self.powerWhite = pygame.transform.scale(self.powerWhite, (
+        self.powerBlue2 = pygame.image.load('Sprites/POWER_GHOST_BLUE2.png').convert_alpha()
+        self.powerBlue2 = pygame.transform.scale(self.powerBlue2, (
+            BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6, BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6))
+        self.powerWhite1 = pygame.image.load('Sprites/POWER_GHOST_WHITE1.png').convert_alpha()
+        self.powerWhite1 = pygame.transform.scale(self.powerWhite1, (
             BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6, BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6))
 
 
@@ -338,6 +341,57 @@ class Ghost(pygame.sprite.Sprite):
         self.inkyleft2 = self.transformpic(self.inkyleft2)
         self.inkyright1 = self.transformpic(self.inkyright1)
         self.inkyright2 = self.transformpic(self.inkyright2)
+        
+        self.blinkyup1 = pygame.image.load('Sprites/RED_GHOST_UP1.png').convert_alpha()
+        self.blinkyup2 = pygame.image.load('Sprites/RED_GHOST_UP2.png').convert_alpha()
+        self.blinkydown1 = pygame.image.load('Sprites/RED_GHOST_DOWN1.png').convert_alpha()
+        self.blinkydown2 = pygame.image.load('Sprites/RED_GHOST_DOWN2.png').convert_alpha()
+        self.blinkyleft1 = pygame.image.load('Sprites/RED_GHOST_LEFT1.png').convert_alpha()
+        self.blinkyleft2 = pygame.image.load('Sprites/RED_GHOST_LEFT2.png').convert_alpha()
+        self.blinkyright1 = pygame.image.load('Sprites/RED_GHOST_RIGHT1.png').convert_alpha()
+        self.blinkyright2 = pygame.image.load('Sprites/RED_GHOST_RIGHT2.png').convert_alpha()
+        self.blinkyup1 = self.transformpic(self.blinkyup1)
+        self.blinkyup2 = self.transformpic(self.blinkyup2)
+        self.blinkydown1 = self.transformpic(self.blinkydown1)
+        self.blinkydown2 = self.transformpic(self.blinkydown2)
+        self.blinkyleft1 = self.transformpic(self.blinkyleft1)
+        self.blinkyleft2 = self.transformpic(self.blinkyleft2)
+        self.blinkyright1 = self.transformpic(self.blinkyright1)
+        self.blinkyright2 = self.transformpic(self.blinkyright2)
+        
+        self.clydeup1 = pygame.image.load('Sprites/ORANGE_GHOST_UP1.png').convert_alpha()
+        self.clydeup2 = pygame.image.load('Sprites/ORANGE_GHOST_UP2.png').convert_alpha()
+        self.clydedown1 = pygame.image.load('Sprites/ORANGE_GHOST_DOWN1.png').convert_alpha()
+        self.clydedown2 = pygame.image.load('Sprites/ORANGE_GHOST_DOWN2.png').convert_alpha()
+        self.clydeleft1 = pygame.image.load('Sprites/ORANGE_GHOST_LEFT1.png').convert_alpha()
+        self.clydeleft2 = pygame.image.load('Sprites/ORANGE_GHOST_LEFT2.png').convert_alpha()
+        self.clyderight1 = pygame.image.load('Sprites/ORANGE_GHOST_RIGHT1.png').convert_alpha()
+        self.clyderight2 = pygame.image.load('Sprites/ORANGE_GHOST_RIGHT2.png').convert_alpha()
+        self.clydeup1 = self.transformpic(self.clydeup1)
+        self.clydeup2 = self.transformpic(self.clydeup2)
+        self.clydedown1 = self.transformpic(self.clydedown1)
+        self.clydedown2 = self.transformpic(self.clydedown2)
+        self.clydeleft1 = self.transformpic(self.clydeleft1)
+        self.clydeleft2 = self.transformpic(self.clydeleft2)
+        self.clyderight1 = self.transformpic(self.clyderight1)
+        self.clyderight2 = self.transformpic(self.clyderight2)
+
+        self.pinkyup1 = pygame.image.load('Sprites/PINK_GHOST_UP1.png').convert_alpha()
+        self.pinkyup2 = pygame.image.load('Sprites/PINK_GHOST_UP2.png').convert_alpha()
+        self.pinkydown1 = pygame.image.load('Sprites/PINK_GHOST_DOWN1.png').convert_alpha()
+        self.pinkydown2 = pygame.image.load('Sprites/PINK_GHOST_DOWN2.png').convert_alpha()
+        self.pinkyleft1 = pygame.image.load('Sprites/PINK_GHOST_LEFT1.png').convert_alpha()
+        self.pinkyleft2 = pygame.image.load('Sprites/PINK_GHOST_LEFT2.png').convert_alpha()
+        self.pinkyright1 = pygame.image.load('Sprites/PINK_GHOST_RIGHT1.png').convert_alpha()
+        self.pinkyright2 = pygame.image.load('Sprites/PINK_GHOST_RIGHT2.png').convert_alpha()
+        self.pinkyup1 = self.transformpic(self.pinkyup1)
+        self.pinkyup2 = self.transformpic(self.pinkyup2)
+        self.pinkydown1 = self.transformpic(self.pinkydown1)
+        self.pinkydown2 = self.transformpic(self.pinkydown2)
+        self.pinkyleft1 = self.transformpic(self.pinkyleft1)
+        self.pinkyleft2 = self.transformpic(self.pinkyleft2)
+        self.pinkyright1 = self.transformpic(self.pinkyright1)
+        self.pinkyright2 = self.transformpic(self.pinkyright2)
 
         self.rect = pygame.Rect(x + BLOCK_WIDTH // 4, y + BLOCK_WIDTH // 4, BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6,
                                 BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6)
@@ -369,16 +423,16 @@ class Ghost(pygame.sprite.Sprite):
         self.rect.top += self.y
 
         if self.x == MOVE_VEL and self.y == 0:
-            self.wiggle(counter, self.inkyright1, self.inkyright2)
+            self.wiggle(counter, self.blinkyright1, self.blinkyright2)
 
         if self.x == -MOVE_VEL and self.y == 0:
-            self.wiggle(counter, self.inkyleft1, self.inkyleft2)
+            self.wiggle(counter, self.blinkyleft1, self.blinkyleft2)
 
         if self.x == 0 and self.y == MOVE_VEL:
-            self.wiggle(counter, self.inkydown1, self.inkydown2)
+            self.wiggle(counter, self.blinkydown1, self.blinkydown2)
 
         if self.x == 0 and self.y == -MOVE_VEL:
-            self.wiggle(counter, self.inkyup1, self.inkyup2)
+            self.wiggle(counter, self.blinkyup1, self.blinkyup2)
 
     def updateclyde(self, barriers, player, counter):
         if self.x == 0 and self.y == 0:
@@ -391,6 +445,18 @@ class Ghost(pygame.sprite.Sprite):
 
         # increment in y direction
         self.rect.top += self.y
+        
+        if self.x == MOVE_VEL and self.y == 0:
+            self.wiggle(counter, self.clyderight1, self.clyderight2)
+
+        if self.x == -MOVE_VEL and self.y == 0:
+            self.wiggle(counter, self.clydeleft1, self.clydeleft2)
+
+        if self.x == 0 and self.y == MOVE_VEL:
+            self.wiggle(counter, self.clydedown1, self.clydedown2)
+
+        if self.x == 0 and self.y == -MOVE_VEL:
+            self.wiggle(counter, self.clydeup1, self.clydeup2)
 
     def updateinky(self, barriers, player, counter):
         if self.x == 0 and self.y == 0:
@@ -427,6 +493,18 @@ class Ghost(pygame.sprite.Sprite):
 
         # increment in y direction
         self.rect.top += self.y
+        if self.x == MOVE_VEL and self.y == 0:
+            self.wiggle(counter, self.pinkyright1, self.pinkyright2)
+
+        if self.x == -MOVE_VEL and self.y == 0:
+            self.wiggle(counter, self.pinkyleft1, self.pinkyleft2)
+
+        if self.x == 0 and self.y == MOVE_VEL:
+            self.wiggle(counter, self.pinkydown1, self.pinkydown2)
+
+        if self.x == 0 and self.y == -MOVE_VEL:
+            self.wiggle(counter, self.pinkyup1, self.pinkyup2)
+        
 
     def collide(self, x, y, barriers, player):
         for p in barriers:
