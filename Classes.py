@@ -41,6 +41,7 @@ class Player(pygame.sprite.Sprite):
         self.die10 = pygame.image.load('Sprites/die10.png').convert_alpha()
         self.die11 = pygame.image.load('Sprites/die11.png').convert_alpha()
         self.onehundred = pygame.image.load('Sprites/oneHundred.png').convert_alpha()
+        self.twohundred = pygame.image.load('Sprites/twoHundred.png').convert_alpha()
 
         self.powerBlue1 = pygame.image.load('Sprites/POWER_GHOST_BLUE1.png').convert_alpha()
         self.powerBlue1 = pygame.transform.scale(self.powerBlue1, (
@@ -56,6 +57,7 @@ class Player(pygame.sprite.Sprite):
         self.imageOrig = self.transformpic(imgFile)
         self.image = self.transformpic(imgFile)
         self.onehundred = self.transformpic(self.onehundred)
+        self.twohundred = self.transformpic(self.twohundred)
         self.die1 = self.transformpic(self.die1)
         self.die2 = self.transformpic(self.die2)
         self.die3 = self.transformpic(self.die3)
@@ -197,6 +199,10 @@ class Player(pygame.sprite.Sprite):
                 if s != self.rect and self.rect.collidepoint(
                         s.rect.center) and s in ghost_list and self.PowerPac == True:
                     self.score += 200
+                    Functions.screen.fill(BLACK)
+                    sprites.draw(Functions.screen)
+                    Functions.screen.blit(self.twohundred, (self.rect.x, self.rect.y))
+                    pygame.display.update()
                     s.ghostReset()
 
                 # Collide with Power Pellet
@@ -567,7 +573,7 @@ class Ghost(pygame.sprite.Sprite):
             min = "L"
 
         if min in open:
-            print(open)
+            # print(open)
             if min == "U":
                 self.y = -MOVE_VEL
                 self.x = 0
@@ -582,7 +588,7 @@ class Ghost(pygame.sprite.Sprite):
                 self.x = -MOVE_VEL
             return
         pick = random.randint(0, len(open) - 1)
-        print(open[pick])
+        # print(open[pick])
         if open[pick] == "U":
             self.y = -MOVE_VEL
             self.x = 0
