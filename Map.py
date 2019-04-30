@@ -41,7 +41,7 @@ def map():
         "PCPPCPCPPPPPCPCPPCP",
         "PCCCCPCCCPCCCPCCCCP",
         "PPPPCPPPCPCPPPCPPPP",
-        "PPPPCP R     PCPPPP",
+        "PPPPCP   R   PCPPPP",
         "PPPPCP PPDPP PCPPPP",
         "    C  PBQOP  C    ",
         "PPPPCP PPPPP PCPPPP",
@@ -169,9 +169,9 @@ def map():
             player.update(up, down, left, right, platforms, counter, sprites, power_list, fruit_list, ghost_list,
                           barriers)
             blinky.updateblinky(platforms, player, counter)
-            # pinky.updatepinky(platforms,player, counter)
-            # inky.updateinky(platforms,player, counter)
-            # clyde.updateclyde(platforms,player, counter)
+            pinky.updatepinky(platforms,player, counter)
+            inky.updateinky(platforms,player, counter)
+            clyde.updateclyde(platforms,player, counter)
             sprites.draw(screen)
             Functions.HUD(player.lives, player.score)
             pygame.display.update()
@@ -186,9 +186,9 @@ def map():
             player.update(up, down, left, right, platforms, counter, sprites, power_list, fruit_list, ghost_list,
                           barriers)
             blinky.updateblinky(platforms, player, counter)
-            # pinky.updatepinky(platforms,player, counter)
-            # inky.updateinky(platforms,player, counter)
-            # clyde.updateclyde(platforms,player, counter)
+            pinky.updatepinky(platforms,player, counter)
+            inky.updateinky(platforms,player, counter)
+            clyde.updateclyde(platforms,player, counter)
             sprites.draw(screen)
             Functions.HUD(player.lives, player.score)
             pygame.display.update()

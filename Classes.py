@@ -408,11 +408,14 @@ class Ghost(pygame.sprite.Sprite):
             self.image = image2
 
     def ghostReset(self):
-        self.rect.centerx, self.rect.centery = self.startx, self.starty
+        self.rect.centerx, self.rect.centery = 306, 308
 
     def updateblinky(self, barriers, player, counter):
         if self.x == 0 and self.y == 0:
             self.x = MOVE_VEL
+        if self.rect.center == (306, 308):
+            self.y = -MOVE_VEL
+            self.x = 0
 
         self.collide(self.x, 0, barriers, player)
         self.collide(0, self.y, barriers, player)
@@ -436,7 +439,10 @@ class Ghost(pygame.sprite.Sprite):
 
     def updateclyde(self, barriers, player, counter):
         if self.x == 0 and self.y == 0:
-            self.x = MOVE_VEL
+            self.x = -MOVE_VEL
+        if self.rect.center == (306, 308):
+            self.y = -MOVE_VEL
+            self.x = 0
 
         self.collide(self.x, 0, barriers, player)
         self.collide(0, self.y, barriers, player)
@@ -461,6 +467,9 @@ class Ghost(pygame.sprite.Sprite):
     def updateinky(self, barriers, player, counter):
         if self.x == 0 and self.y == 0:
             self.x = MOVE_VEL
+        if self.rect.center == (306, 308):
+            self.y = -MOVE_VEL
+            self.x = 0
 
         self.collide(self.x, 0, barriers, player)
         self.collide(0, self.y, barriers, player)
@@ -484,7 +493,10 @@ class Ghost(pygame.sprite.Sprite):
 
     def updatepinky(self, barriers, player, counter):
         if self.x == 0 and self.y == 0:
-            self.x = MOVE_VEL
+            self.y = -MOVE_VEL
+        if self.rect.center == (306,308):
+            self.y = -MOVE_VEL
+            self.x = 0
 
         self.collide(self.x, 0, barriers, player)
         self.collide(0, self.y, barriers, player)
@@ -522,6 +534,7 @@ class Ghost(pygame.sprite.Sprite):
                 if y < 0:
                     self.rect.top = p.rect.bottom
                     self.y = 0
+
                 if x != 0 or y != 0:
                     self.changeDirection(x, y, barriers, player)
 
@@ -551,7 +564,7 @@ class Ghost(pygame.sprite.Sprite):
             min = "U"
         if ((self.rect.centerx - player.rect.centerx) ** 2 + (self.rect.centery + M - player.rect.centery) ** 2) < dist:
             dist = ((self.rect.centerx - player.rect.centerx) ** 2 + (self.rect.centery + M - player.rect.centery) ** 2)
-            min = "D"
+            min = "L"
 
         if min in open:
             print(open)
