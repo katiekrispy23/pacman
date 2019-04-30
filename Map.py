@@ -41,7 +41,7 @@ def map():
         "PCPPCPCPPPPPCPCPPCP",
         "PCCCCPCCCPCCCPCCCCP",
         "PPPPCPPPCPCPPPCPPPP",
-        "PPPPCP R     PCPPPP",
+        "PPPPCP   R   PCPPPP",
         "PPPPCP PDDDP PCPPPP",
         "    C  PBQOP  C    ",
         "PPPPCP PPPPP PCPPPP",
