@@ -326,6 +326,7 @@ class Ghost(pygame.sprite.Sprite):
         self.y = 0
         self.startx = x
         self.starty = y
+        self.GHOST_VEL = GHOST_VEL
         self.imageOrig = pygame.image.load(sprite).convert_alpha()
         self.imageOrig = pygame.transform.scale(self.imageOrig, (
         BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6, BLOCK_WIDTH // 2 + BLOCK_WIDTH // 6))
@@ -419,7 +420,7 @@ class Ghost(pygame.sprite.Sprite):
 
     def updateblinky(self, barriers, player, counter):
         if self.x == 0 and self.y == 0:
-            self.x = GHOST_VEL
+            self.x = self.GHOST_VEL
 
         self.collide(self.x, 0, barriers, player)
         self.collide(0, self.y, barriers, player)
@@ -429,21 +430,21 @@ class Ghost(pygame.sprite.Sprite):
         # increment in y direction
         self.rect.top += self.y
 
-        if self.x == GHOST_VEL and self.y == 0:
+        if self.x == self.GHOST_VEL and self.y == 0:
             self.wiggle(counter, self.blinkyright1, self.blinkyright2)
 
-        if self.x == -GHOST_VEL and self.y == 0:
+        if self.x == -self.GHOST_VEL and self.y == 0:
             self.wiggle(counter, self.blinkyleft1, self.blinkyleft2)
 
-        if self.x == 0 and self.y == GHOST_VEL:
+        if self.x == 0 and self.y == self.GHOST_VEL:
             self.wiggle(counter, self.blinkydown1, self.blinkydown2)
 
-        if self.x == 0 and self.y == -GHOST_VEL:
+        if self.x == 0 and self.y == -self.GHOST_VEL:
             self.wiggle(counter, self.blinkyup1, self.blinkyup2)
 
     def updateclyde(self, barriers, player, counter):
         if self.x == 0 and self.y == 0:
-            self.x = GHOST_VEL
+            self.x = self.GHOST_VEL
 
         self.collide(self.x, 0, barriers, player)
         self.collide(0, self.y, barriers, player)
@@ -453,21 +454,21 @@ class Ghost(pygame.sprite.Sprite):
         # increment in y direction
         self.rect.top += self.y
         
-        if self.x == GHOST_VEL and self.y == 0:
+        if self.x == self.GHOST_VEL and self.y == 0:
             self.wiggle(counter, self.clyderight1, self.clyderight2)
 
-        if self.x == -GHOST_VEL and self.y == 0:
+        if self.x == -self.GHOST_VEL and self.y == 0:
             self.wiggle(counter, self.clydeleft1, self.clydeleft2)
 
-        if self.x == 0 and self.y == GHOST_VEL:
+        if self.x == 0 and self.y == self.GHOST_VEL:
             self.wiggle(counter, self.clydedown1, self.clydedown2)
 
-        if self.x == 0 and self.y == -GHOST_VEL:
+        if self.x == 0 and self.y == -self.GHOST_VEL:
             self.wiggle(counter, self.clydeup1, self.clydeup2)
 
     def updateinky(self, barriers, player, counter):
         if self.x == 0 and self.y == 0:
-            self.x = GHOST_VEL
+            self.x = self.GHOST_VEL
 
         self.collide(self.x, 0, barriers, player)
         self.collide(0, self.y, barriers, player)
@@ -477,21 +478,21 @@ class Ghost(pygame.sprite.Sprite):
         # increment in y direction
         self.rect.top += self.y
 
-        if self.x == GHOST_VEL and self.y == 0:
+        if self.x == self.GHOST_VEL and self.y == 0:
             self.wiggle(counter, self.inkyright1, self.inkyright2)
 
-        if self.x == -GHOST_VEL and self.y == 0:
+        if self.x == -self.GHOST_VEL and self.y == 0:
             self.wiggle(counter, self.inkyleft1, self.inkyleft2)
 
-        if self.x == 0 and self.y == GHOST_VEL:
+        if self.x == 0 and self.y == self.GHOST_VEL:
             self.wiggle(counter, self.inkydown1, self.inkydown2)
 
-        if self.x == 0 and self.y == -GHOST_VEL:
+        if self.x == 0 and self.y == -self.GHOST_VEL:
             self.wiggle(counter, self.inkyup1, self.inkyup2)
 
     def updatepinky(self, barriers, player, counter):
         if self.x == 0 and self.y == 0:
-            self.x = GHOST_VEL
+            self.x = self.GHOST_VEL
 
         self.collide(self.x, 0, barriers, player)
         self.collide(0, self.y, barriers, player)
@@ -500,16 +501,16 @@ class Ghost(pygame.sprite.Sprite):
 
         # increment in y direction
         self.rect.top += self.y
-        if self.x == GHOST_VEL and self.y == 0:
+        if self.x == self.GHOST_VEL and self.y == 0:
             self.wiggle(counter, self.pinkyright1, self.pinkyright2)
 
-        if self.x == -GHOST_VEL and self.y == 0:
+        if self.x == -self.GHOST_VEL and self.y == 0:
             self.wiggle(counter, self.pinkyleft1, self.pinkyleft2)
 
-        if self.x == 0 and self.y == GHOST_VEL:
+        if self.x == 0 and self.y == self.GHOST_VEL:
             self.wiggle(counter, self.pinkydown1, self.pinkydown2)
 
-        if self.x == 0 and self.y == -GHOST_VEL:
+        if self.x == 0 and self.y == -self.GHOST_VEL:
             self.wiggle(counter, self.pinkyup1, self.pinkyup2)
         
 
@@ -563,29 +564,29 @@ class Ghost(pygame.sprite.Sprite):
         if min in open:
             print(open)
             if min == "U":
-                self.y = -GHOST_VEL
+                self.y = -self.GHOST_VEL
                 self.x = 0
             if min == "D":
-                self.y = GHOST_VEL
+                self.y = self.GHOST_VEL
                 self.x = 0
             if min == "R":
                 self.y = 0
-                self.x = GHOST_VEL
+                self.x = self.GHOST_VEL
             if min == "L":
                 self.y = 0
-                self.x = -GHOST_VEL
+                self.x = -self.GHOST_VEL
             return
         pick = random.randint(0, len(open) - 1)
         print(open[pick])
         if open[pick] == "U":
-            self.y = -GHOST_VEL
+            self.y = -self.GHOST_VEL
             self.x = 0
         if open[pick] == "D":
-            self.y = GHOST_VEL
+            self.y = self.GHOST_VEL
             self.x = 0
         if open[pick] == "R":
             self.y = 0
-            self.x = GHOST_VEL
+            self.x = self.GHOST_VEL
         if open[pick] == "L":
             self.y = 0
-            self.x = -GHOST_VEL
+            self.x = -self.GHOST_VEL

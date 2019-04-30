@@ -152,7 +152,7 @@ def map():
                 left = False
 
         if player.PowerPac == True:
-
+            Ghost.GHOST_VEL = 1
             for g in ghost_list:  # make the ghosts blue
                 g.image = player.powerBlue1
 
