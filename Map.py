@@ -27,6 +27,7 @@ def map():
     ghost_list = []
     platforms = []
     barriers = []
+    pellet_list = []
 
     x = 0
     y = 0
@@ -60,33 +61,35 @@ def map():
     playerFlag = True
     for row in level:
         for col in row:
-            if col == "B":
+            if col == "B": # inky ghost (Blue)
                 inky = Ghost(x, y, "Sprites/BLUE_GHOST_UP1.png")
                 ghost_list.append(inky)
                 sprites.add(inky)
-            if col == "Q":
+            if col == "Q": # pinky ghost (Pink)
                 pinky = Ghost(x, y, "Sprites/PINK_GHOST_DOWN1.png")
                 ghost_list.append(pinky)
                 sprites.add(pinky)
-            if col == "O":
+            if col == "O": # clyde ghost (Orange)
                 clyde = Ghost(x, y, "Sprites/ORANGE_GHOST_UP1.png")
                 ghost_list.append(clyde)
                 sprites.add(clyde)
-            if col == "R":
+            if col == "R": # blinky ghost (red)
                 blinky = Ghost(x, y, "Sprites/RED_GHOST_LEFT1.png")
                 ghost_list.append(blinky)
                 sprites.add(blinky)
-            if col == "Y":
+            if col == "Y": # for power pellets
                 power = Power(x, y)
                 power_list.append(power)
+                pellet_list.append(power)
                 sprites.add(power)
             if col == "P":
                 p = Platform(x, y)
                 barriers.append(p)
                 platforms.append(p)
                 sprites.add(p)
-            if col == "C":
+            if col == "C": #regular pellets
                 pellets = Pellets(x, y)
+                pellet_list.append(pellets)
                 sprites.add(pellets)
             if col == "F":
                 fruit = Fruit(x, y)
@@ -151,6 +154,10 @@ def map():
             if e.type == KEYUP and e.key == K_LEFT:
                 left = False
 
+        # if the pellets are all eaten, you win!!!
+        if len(pellet_list) == 0:
+            Functions.youWin(sprites, player.score)
+
         if player.PowerPac == True:
 
             for g in ghost_list:  # make the ghosts blue
@@ -167,7 +174,7 @@ def map():
             # update player, draw everything else
             counter = counter % 15
             player.update(up, down, left, right, platforms, counter, sprites, power_list, fruit_list, ghost_list,
-                          barriers)
+                          barriers, pellet_list)
             blinky.updateblinky(platforms, player, counter)
             pinky.updatepinky(platforms,player, counter)
             inky.updateinky(platforms,player, counter)
@@ -184,7 +191,7 @@ def map():
             # update player, draw everything else
             counter = counter % 15
             player.update(up, down, left, right, platforms, counter, sprites, power_list, fruit_list, ghost_list,
-                          barriers)
+                          barriers, pellet_list)
             blinky.updateblinky(platforms, player, counter)
             pinky.updatepinky(platforms,player, counter)
             inky.updateinky(platforms,player, counter)

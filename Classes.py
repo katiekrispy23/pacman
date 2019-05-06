@@ -138,7 +138,7 @@ class Player(pygame.sprite.Sprite):
         pygame.time.delay(250)
 
     # updates the location and speed based on keyboard inputs
-    def update(self, up, down, left, right, platforms, counter, sprites, power_list, fruit_list, ghost_list, barriers):
+    def update(self, up, down, left, right, platforms, counter, sprites, power_list, fruit_list, ghost_list, barriers, pellet_list):
         # Start with no change in x-position... see what happened
         if up:
             self.chompchomp(counter)
@@ -167,7 +167,7 @@ class Player(pygame.sprite.Sprite):
         self.rect.left += self.x
 
         # do x-axis collisions
-        self.collide(self.x, 0, platforms, sprites, power_list, fruit_list, ghost_list, barriers)
+        self.collide(self.x, 0, platforms, sprites, power_list, fruit_list, ghost_list, barriers, pellet_list)
 
         # increment in y direction
         self.rect.top += self.y
@@ -176,12 +176,12 @@ class Player(pygame.sprite.Sprite):
         # self.onGround = False
 
         # do y-axis collisions
-        self.collide(0, self.y, platforms, sprites, power_list, fruit_list, ghost_list, barriers)
+        self.collide(0, self.y, platforms, sprites, power_list, fruit_list, ghost_list, barriers, pellet_list)
         # return score
         self.direction()
 
     # rules for when he collides with walls and barriers
-    def collide(self, x, y, platforms, sprites, power_list, fruit_list, ghost_list, barriers):
+    def collide(self, x, y, platforms, sprites, power_list, fruit_list, ghost_list, barriers, pellet_list):
         chompSound = pygame.mixer.Sound("Sounds/pacman_chomp.wav")
         fruitSound = pygame.mixer.Sound("Sounds/pacman_eatfruit.wav")
         dieSound = pygame.mixer.Sound("Sounds/pacman_death.wav")
@@ -190,13 +190,13 @@ class Player(pygame.sprite.Sprite):
             if s not in platforms:
 
                 # Collide with Ghost
-                if s != self.rect and self.rect.collidepoint(
+                if s != self.rect and self.rect.collidepoint( #if pacman hits a ghost
                         s.rect.center) and s in ghost_list and self.PowerPac == False:
                     pygame.mixer.Sound.play(dieSound)
                     self.dieAnimation(sprites)
                     self.reset(self.lives, sprites)
 
-                if s != self.rect and self.rect.collidepoint(
+                if s != self.rect and self.rect.collidepoint( # if pacman hits a ghost when it is blue
                         s.rect.center) and s in ghost_list and self.PowerPac == True:
                     self.score += 200
                     Functions.screen.fill(BLACK)
@@ -210,6 +210,7 @@ class Player(pygame.sprite.Sprite):
                     self.score += 50
                     sprites.remove(s)
                     power_list.remove(s)
+                    pellet_list.remove(s)
                     self.PowerPac = True
                     self.t_end = time.time() + 7.5
 
@@ -221,6 +222,7 @@ class Player(pygame.sprite.Sprite):
                 # collide with regular pellet
                 elif s != self.rect and self.rect.collidepoint(s.rect.center):
                     pygame.mixer.Sound.play(chompSound)
+                    pellet_list.remove(s)
                     sprites.remove(s)
                     self.score += 10
 
